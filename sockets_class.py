@@ -60,7 +60,7 @@ class SharedSocket(object):
     
     '''
 
-    default_server_host = '' # '127.0.0.1'
+    default_server_host = '131.142.195.56' # ''# '127.0.0.1' # '131.142.195.56' == mpcweb1(CDP)
     default_server_port = 54321
     default_timeout = 111
 

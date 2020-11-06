@@ -52,10 +52,51 @@ def test_threading_server_and_client(HOST = '127.0.0.1', PORT = 65431):
     server_thread.join()
     
     
+# Some tests of MPC-specific socker server/client
+# These tests need to be pointed at a/the "OrbfitServer"
+# - This can be launched with sockets_class.launch_orbit_fitting_socket_server()
+# ---------------------------------------------------------------
+def test_request_orbit_extension():
+    '''
+    This tests the "Client" class written by MJP for MPC
+    This tests requires that there be a server up-and-running
+    This can be launched with sockets_class.launch_orbit_fitting_socket_server()
+    '''
+    
+    # launch client
+    OC = sc.OrbfitClient()
+    
+    # Make fake data
+    # - at this stage in code-development, no actual orbit fitting is being done
+    # - so it is fine to send empty data
+    #
+    # In real life, this data would be coming from the database
+    observations_list_of_dicts, previous_rwo_dict, previous_standard_epoch_dict = [{},{}], {}, {}
+    
+    # use the *request_orbit_extension* function to get an orbit-fit/extension done
+    # - the intent is that this is on a remote machine, but it can be anywhere for this test
+    observations, rwo_dict, standard_epoch_dict, quality_dict = OC.request_orbit_extension(\
+        observations_list_of_dicts,
+        previous_rwo_dict,
+        previous_standard_epoch_dict)
+        
+    # test format of returned objects ...
+    assert isinstance(observations, (tuple, list))
+    for v in observations   :
+        assert isinstance(v, dict)
+    for k in [rwo_dict, standard_epoch_dict, quality_dict ]:
+        assert isinstance(k , dict)
+    
+
+    
+                                
 
 # Some tests of MPC-specific socker server/client
+# These demos need to be pointed at a/the "DemoOrbfitServer"
+# - This can be launched with sockets_class.launch_demo_orbit_fitting_socket_server()
+# These tests are CURRENTLY COMMENTED OUT AS I SEE NO POINT IN THEM AT THE MOMENT ...
 # ---------------------------------------------------------------
-
+"""
 def test_demo_orbfit_via_pickle():
     '''
     This tests the "Client" class written by MJP for MPC
@@ -177,5 +218,7 @@ def test_demo_big_message_exchange_via_pickleclient():
                 dict_asserts(d)
         else:
             assert False, "Should not get here ..."
+
+"""
 
 

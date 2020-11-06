@@ -46,6 +46,12 @@ def launch_orbit_fitting_socket_server():
     ''' Utility function to launch an example of the server-class defined below '''
     OS = OrbfitServer()
     print(f"Launched socket server: OS.host={OS.host}, OS.port={OS.port}")
+    OS._listen( startup_func = True )
+
+def launch_demo_orbit_fitting_socket_server():
+    ''' Utility function to launch an example of the *Demo* server-class defined below '''
+    OS = DemoOrbfitServer()
+    print(f"Launched demo socket server: OS.host={OS.host}, OS.port={OS.port}")
     OS._demo_listen( startup_func = True )
 
 
@@ -60,9 +66,9 @@ class SharedSocket(object):
     
     '''
 
-    default_server_host = '131.142.192.107' # ''# '127.0.0.1' # '131.142.195.56' == mpcweb1(CDP)  # '131.142.192.107'=='mpcdb1'
+    default_server_host = {'local1':'' , 'local2':'127.0.0.1', 'mpcweb1':'131.142.195.56', 'mpcdb1':'131.142.192.107'}["local1"]
     default_server_port = 54321
-    default_timeout = 111
+    default_timeout = 11
 
     def __init__(self,):
         pass
@@ -132,10 +138,12 @@ class Client(SharedSocket):
         '''
 
         # Pickle the provided data dictionary
-        if VERBOSE:
-            print("message_data to-be-sent \t\t...",message_data)
         pickled = pickle.dumps(message_data)
-            
+
+        if VERBOSE:
+            print("message_data to-be-sent \tRAW    :\t...",message_data)
+            print("message_data to-be-sent \tPICKLED:\t...",pickled)
+
         # Create a socket objects
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
@@ -159,13 +167,173 @@ class Client(SharedSocket):
         return unpickled
 
 
+
+
+
 # Socket-Server-Related Object Definitions
 # - This section has classes SPECIFIC to ORBIT-FITTING
 # --------------------------------------------------------------
+class Orbfit():
+    '''
+    Mainly used to provide shared methods to OrbfitServer & OrbfitClient
+    Mainly enforcing data echange standards ...
+    '''
+    def __init__(self,):
+        pass
+        
+    def _check_data_format_from_client( self, data ):
+    
+        # check overall structure of data is a dict as required
+        assert isinstance(data, dict)
+        assert len(data) == 3
+        for k in ["observations_list_of_dicts", "rwo_dict", "standard_epoch_dict"]:
+            assert k in data
+        
+        # check components of the dict
+        assert isinstance( data["observations_list_of_dicts"], (list,tuple))
+        for item in data["observations_list_of_dicts"]:
+            assert isinstance(item, dict)
+        assert isinstance(data["rwo_dict"] , dict)
+        assert isinstance(data["standard_epoch_dict"] , dict)
+        
+        # return componenets separated-out
+        return data["observations_list_of_dicts"],data["rwo_dict"], data["standard_epoch_dict"]
+        
+    def _check_data_format_from_server(self, data):
+        '''
+        We expect ...
+        data = {
+            "observations_list_of_dicts": returned_observations_list_of_dicts,
+            "rwo_dict" : returned_rwo_dict
+            "standard_epoch_dict" : returned_standard_epoch_dict,
+            "quality_dict" : return_quality_dict
+        }
+        '''
+        # check overall structure of data is a dict as required
+        assert isinstance(data, dict)
+        assert len(data) == 4
+        for k in ["observations_list_of_dicts", "rwo_dict", "standard_epoch_dict","quality_dict"]:
+            assert k in data
+        
+        # check components of the dict
+        assert isinstance(data["observations_list_of_dicts"], (tuple, list))
+        for d in data["observations_list_of_dicts"]:
+            assert isinstance(d, dict)
+        for k in ["rwo_dict", "standard_epoch_dict","quality_dict"]:
+            assert isinstance(data[k] , dict)
+            
+        # return componenets separated-out
+        return  data["observations_list_of_dicts"], \
+                data["rwo_dict"], \
+                data["standard_epoch_dict"], \
+                data["quality_dict"]
 
-class OrbfitServer(Server):
+
+
+class OrbfitServer(Server, Orbfit):
     '''
     Set up a server SPECIFIC to ORBIT-FITTING
+    This is intended to be the production version
+    '''
+
+    def __init__(self, host=None, port=None):
+        Server.__init__(self,)
+
+    def _listen(self, startup_func = False ):
+        '''
+        Demo function to illustrate how to set-up server
+        and to allow tests of various functionalities
+        '''
+        # listen() enables a server to accept() connections
+        # NB "5" is the max number of connection requests to queue-up
+        self.sock.listen(5)
+        print('\nOrbfitServer is listening...')
+        while True :
+            
+            # accept() blocks and waits for an incoming connection.
+            # One thing that’s imperative to understand is that we now have a
+            # new socket object from accept(). This is important since it’s the
+            # socket that you’ll use to communicate with the client. It’s distinct
+            # from the listening socket that the server is using to accept new
+            # connections:
+            client, address = self.sock.accept()
+            client.settimeout(self.default_timeout)
+            
+            # Either of the below work ...
+            #self._demoListenToClient(client,address)
+            threading.Thread(target = self._listenToClient,
+                             args = (client,address)).start()
+
+    def _listenToClient(self, client, address):
+        '''
+        This will...
+        (i) receive a message from a client
+        (ii) check that the received data format is as expected
+        (iii) do an orbit fit [NOT YET CONNECTED]
+        (iv) send results of orbit fit back to client
+        
+        Note this assumes that the supplied data from the client will be in the form of:
+        a *pickled* set of data containing...
+        
+        (1) observations_list_of_dicts : list of dictionaries
+        - all observations for a single object that is to be fitted
+        - one dictionary per observation
+        - each dictionary to contain ades fields from obs table in db
+        
+        (2) previous_rwo_dict : dictionary
+        - contents of rwo_json field
+        - will have been returned from previous orbit fit
+        
+        (3) previous_standard_epoch_dict : dictionary
+        - contents of standard_epoch_json field
+        - will have been returned from previous orbit fit
+
+
+        '''
+        while True:
+            try:
+                data        = self.recv_msg(client)
+                if data:
+                    print(f"data received in _listenToClient, within OrbfitServer : data-size = {sys.getsizeof(data)} bytes")
+                    
+                    # Check data format
+                    data_object             = pickle.loads(data)
+                    observations_list_of_dicts,previous_rwo_dict,previous_standard_epoch_dict = self._check_data_format_from_client(data_object)
+                    
+                    # Do orbit fit [NOT YET IMPLEMENTED]
+                    returned_observations_list_of_dicts, returned_rwo_dict, returned_standard_epoch_dict, return_quality_dict = self.fitting_function( )
+                    
+                    # Reformat the results for transmission
+                    data_dict = {
+                        "observations_list_of_dicts": returned_observations_list_of_dicts,
+                        "rwo_dict" : returned_rwo_dict,
+                        "standard_epoch_dict" : returned_standard_epoch_dict,
+                        "quality_dict" : return_quality_dict
+                        }
+                    data_string = pickle.dumps(data_dict)
+                    
+                    # Send the results back to the client
+                    self.send_msg(client, data_string)
+                    
+                else:
+                    raise error('Client disconnected')
+            except:
+                client.close()
+                return False
+                
+
+
+    def fitting_function(self, ):
+        ''' Do orbit fit [NOT YET IMPLEMENTED] '''
+        return [{}],{},{},{}
+        
+"""
+class DemoOrbfitServer(Server):
+    '''
+    Set up a server SPECIFIC to ORBIT-FITTING
+    This is just a demo version that reflects back what it received
+    This is *NOT* what you want to use in production
+    Thi is JUST FOR TESTING !!!
     '''
 
     def __init__(self, host=None, port=None):
@@ -184,6 +352,7 @@ class OrbfitServer(Server):
             self._a_function_that_takes_a_few_seconds_to_evaluate(i=5)
             
         # listen() enables a server to accept() connections
+        # NB "5" is the max number of connection requests to queue-up
         self.sock.listen(5)
         print('\nI are listen')
         while True :
@@ -242,7 +411,7 @@ class OrbfitServer(Server):
         
         # unpickle ...
         data_object             = pickle.loads(data)
-
+        
         # Here I assume that the unpickled data is a *LIST OF DICTIONARIES*
         for d in data_object:
             d["received"] = True
@@ -263,15 +432,69 @@ class OrbfitServer(Server):
             expected    = (n,n)
             actual      = np.random.random_sample((n,n)).shape
         return True
+"""
 
-
-class OrbfitClient(Client):
+class OrbfitClient(Client, Orbfit):
     '''
     Client specific to ORBIT-FITTING
+    
+    Expected usage:
+    ----------------
+    # Instantiate
+    OC = sc.OrbfitClient()
+    # Use to gett orbit-fit
+    observations, rwo_dict, standard_epoch_dict, quality_dict = OC.request_orbit_extension(\
+        observations_list_of_dicts,
+        previous_rwo_dict,
+        previous_standard_epoch_dict)
+
     '''
 
     def __init__(self, host=None, port=None):
         Client.__init__(self,)
+        Orbfit.__init__(self,)
+
+    def request_orbit_extension(  self,
+                                  observations_list_of_dicts,
+                                  previous_rwo_dict,
+                                  previous_standard_epoch_dict):
+        '''
+        Request an orbit extension/refit for a previously known orbit
+        
+        inputs
+        -------
+        observations_list_of_dicts : list of dictionaries
+        - all observations for a single object that is to be fitted
+        - one dictionary per observation
+        - each dictionary to contain ades fields from obs table in db
+        
+        previous_rwo_dict : dictionary
+        - contents of rwo_json field
+        - will have been returned from previous orbit fit
+        
+        previous_standard_epoch_dict : dictionary
+        - contents of standard_epoch_json field
+        - will have been returned from previous orbit fit
+
+        returns
+        -------
+        
+        '''
+        message_dict = {
+            "observations_list_of_dicts": observations_list_of_dicts,
+            "rwo_dict" : previous_rwo_dict,
+            "standard_epoch_dict" : previous_standard_epoch_dict
+        }
+
+        # Do checks on the input format
+        self._check_data_format_from_client(message_dict)
+        
+        # Send data via *_pickleclient* function
+        result = self._pickleclient(message_dict, VERBOSE = True )
+
+        # check the returned data is as expected & return ...
+        #observations, rwo_dict,standard_epoch_dict,quality_dict = self._check_returned_data_format(result)
+        return self._check_data_format_from_server(result)
     
     def _demo_orbfit_via_pickle(self,):
         '''

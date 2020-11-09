@@ -75,7 +75,7 @@ def test_request_orbit_extension():
     
     # use the *request_orbit_extension* function to get an orbit-fit/extension done
     # - the intent is that this is on a remote machine, but it can be anywhere for this test
-    observations, rwo_dict, standard_epoch_dict, quality_dict = OC.request_orbit_extension(\
+    observations, rwo_dict, standard_epoch_dict, mid_epoch_dict, quality_dict = OC.request_orbit_extension(\
         observations_list_of_dicts,
         previous_rwo_dict,
         previous_standard_epoch_dict)

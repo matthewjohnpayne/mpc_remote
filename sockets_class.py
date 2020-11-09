@@ -186,7 +186,7 @@ class Orbfit():
         # check overall structure of data is a dict as required
         assert isinstance(data, dict)
         assert len(data) == 3
-        for k in ["observations_list_of_dicts", "rwo_dict", "standard_epoch_dict"]:
+        for k in ["observations_list_of_dicts", "rwo_dict", "mid_epoch_dict"]:
             assert k in data
         
         # check components of the dict
@@ -194,10 +194,10 @@ class Orbfit():
         for item in data["observations_list_of_dicts"]:
             assert isinstance(item, dict)
         assert isinstance(data["rwo_dict"] , dict)
-        assert isinstance(data["standard_epoch_dict"] , dict)
+        assert isinstance(data["mid_epoch_dict"] , dict)
         
         # return componenets separated-out
-        return data["observations_list_of_dicts"],data["rwo_dict"], data["standard_epoch_dict"]
+        return data["observations_list_of_dicts"],data["rwo_dict"], data["mid_epoch_dict"]
         
     def _check_data_format_from_server(self, data):
         '''
@@ -206,26 +206,28 @@ class Orbfit():
             "observations_list_of_dicts": returned_observations_list_of_dicts,
             "rwo_dict" : returned_rwo_dict
             "standard_epoch_dict" : returned_standard_epoch_dict,
+            "mid_epoch_dict" : returned_mid_epoch_dict,
             "quality_dict" : return_quality_dict
         }
         '''
         # check overall structure of data is a dict as required
         assert isinstance(data, dict)
-        assert len(data) == 4
-        for k in ["observations_list_of_dicts", "rwo_dict", "standard_epoch_dict","quality_dict"]:
+        assert len(data) == 5
+        for k in ["observations_list_of_dicts", "rwo_dict", "standard_epoch_dict","mid_epoch_dict","quality_dict"]:
             assert k in data
         
         # check components of the dict
         assert isinstance(data["observations_list_of_dicts"], (tuple, list))
         for d in data["observations_list_of_dicts"]:
             assert isinstance(d, dict)
-        for k in ["rwo_dict", "standard_epoch_dict","quality_dict"]:
+        for k in ["rwo_dict", "standard_epoch_dict","mid_epoch_dict","quality_dict"]:
             assert isinstance(data[k] , dict)
             
         # return componenets separated-out
         return  data["observations_list_of_dicts"], \
                 data["rwo_dict"], \
                 data["standard_epoch_dict"], \
+                data["mid_epoch_dict"], \
                 data["quality_dict"]
 
 
@@ -298,15 +300,16 @@ class OrbfitServer(Server, Orbfit):
                     
                     # Check data format
                     data_object             = pickle.loads(data)
-                    observations_list_of_dicts,previous_rwo_dict,previous_standard_epoch_dict = self._check_data_format_from_client(data_object)
+                    observations_list_of_dicts,previous_rwo_dict,previous_mid_epoch_dict = self._check_data_format_from_client(data_object)
                     
                     # Do orbit fit [NOT YET IMPLEMENTED]
-                    returned_observations_list_of_dicts, returned_rwo_dict, returned_standard_epoch_dict, return_quality_dict = self.fitting_function( )
+                    returned_observations_list_of_dicts, returned_rwo_dict, returned_mid_epoch_dict,returned_standard_epoch_dict, return_quality_dict = self.fitting_function( )
                     
                     # Reformat the results for transmission
                     data_dict = {
                         "observations_list_of_dicts": returned_observations_list_of_dicts,
                         "rwo_dict" : returned_rwo_dict,
+                        "mid_epoch_dict" : returned_mid_epoch_dict,
                         "standard_epoch_dict" : returned_standard_epoch_dict,
                         "quality_dict" : return_quality_dict
                         }
@@ -325,7 +328,9 @@ class OrbfitServer(Server, Orbfit):
 
     def fitting_function(self, ):
         ''' Do orbit fit [NOT YET IMPLEMENTED] '''
-        return [{}],{},{},{}
+        # The returned quantities are expected to be ...
+        # returned_observations_list_of_dicts, returned_rwo_dict, returned_mid_epoch_dict,returned_standard_epoch_dict, return_quality_dict
+        return [{}],{},{},{},{}
         
 """
 class DemoOrbfitServer(Server):
@@ -457,7 +462,7 @@ class OrbfitClient(Client, Orbfit):
     def request_orbit_extension(  self,
                                   observations_list_of_dicts,
                                   previous_rwo_dict,
-                                  previous_standard_epoch_dict):
+                                  previous_mid_epoch_dict):
         '''
         Request an orbit extension/refit for a previously known orbit
         
@@ -472,8 +477,8 @@ class OrbfitClient(Client, Orbfit):
         - contents of rwo_json field
         - will have been returned from previous orbit fit
         
-        previous_standard_epoch_dict : dictionary
-        - contents of standard_epoch_json field
+        previous_mid_epoch_dict : dictionary
+        - contents of mid_epoch_json field
         - will have been returned from previous orbit fit
 
         returns
@@ -483,7 +488,7 @@ class OrbfitClient(Client, Orbfit):
         message_dict = {
             "observations_list_of_dicts": observations_list_of_dicts,
             "rwo_dict" : previous_rwo_dict,
-            "standard_epoch_dict" : previous_standard_epoch_dict
+            "mid_epoch_dict" : previous_mid_epoch_dict
         }
 
         # Do checks on the input format
@@ -493,7 +498,15 @@ class OrbfitClient(Client, Orbfit):
         result = self._pickleclient(message_dict, VERBOSE = True )
 
         # check the returned data is as expected & return ...
-        #observations, rwo_dict,standard_epoch_dict,quality_dict = self._check_returned_data_format(result)
+        '''
+        _check_data_format_from_server()
+        ...
+        return  data["observations_list_of_dicts"], \
+                data["rwo_dict"], \
+                data["standard_epoch_dict"], \
+                data["mid_epoch_dict"], \
+                data["quality_dict"]
+        '''
         return self._check_data_format_from_server(result)
     
     def _demo_orbfit_via_pickle(self,):
@@ -506,4 +519,6 @@ class OrbfitClient(Client, Orbfit):
         
 
 if __name__ == "__main__":
-    Server().listen(startup_func = True )
+    OS = OrbfitServer()
+    print(f"Launched socket server: OS.host={OS.host}, OS.port={OS.port}")
+    OS._listen( startup_func = True )

@@ -66,7 +66,7 @@ class SharedSocket(object):
     
     '''
 
-    default_server_host = {'local1':'' , 'local2':'127.0.0.1', 'mpcweb1':'131.142.195.56', 'mpcdb1':'131.142.192.107'}["local1"]
+    default_server_host = {'local1':'' , 'local2':'127.0.0.1', 'mpcweb1':'131.142.195.56', 'mpcdb1':'131.142.192.107', 'marsden':'131.142.192.120'}["marsden"]
     default_server_port = 54321
     default_timeout = 11
 

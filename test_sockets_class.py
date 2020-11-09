@@ -71,14 +71,14 @@ def test_request_orbit_extension():
     # - so it is fine to send empty data
     #
     # In real life, this data would be coming from the database
-    observations_list_of_dicts, previous_rwo_dict, previous_standard_epoch_dict = [{},{}], {}, {}
+    observations_list_of_dicts, previous_rwo_dict, previous_mid_epoch_dict = [{},{}], {}, {}
     
     # use the *request_orbit_extension* function to get an orbit-fit/extension done
     # - the intent is that this is on a remote machine, but it can be anywhere for this test
     observations, rwo_dict, standard_epoch_dict, mid_epoch_dict, quality_dict = OC.request_orbit_extension(\
         observations_list_of_dicts,
         previous_rwo_dict,
-        previous_standard_epoch_dict)
+        previous_mid_epoch_dict)
         
     # test format of returned objects ...
     assert isinstance(observations, (tuple, list))

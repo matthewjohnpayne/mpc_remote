@@ -12,15 +12,22 @@ $ python3 deploy.py M
 import sys, os
 
 if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
+  # This is for the web-server ..,
   if sys.argv[1] == "W" : 
     print("Deploying code on web-server: This is currently a primitive script-copy")
     for script in ["orbfit.cgi"]:
-      command = "cp %s /var/www/cgi-bin/cgipy" % script
+      command = "sudo cp %s /var/www/cgi-bin/cgipy" % script
       print("\t", command)
       os.system(command)
-  elif sys.argv[1] == "M"
+
+  # This is for the compute cluster ...
+  elif sys.argv[1] == "M":
     OS = OrbfitServer()
     print(f"Launched socket server: OS.host={OS.host}, OS.port={OS.port}")
     OS._listen( startup_func = True )
+
+  else:
+    print("should not be able to see this error")
+
 else:
   print("input args not recognized ...", sys.argv)

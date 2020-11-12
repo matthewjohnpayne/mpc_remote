@@ -126,7 +126,7 @@ class Client(SharedSocket):
         self.server_host = host if host is not None else self.default_server_host
         self.server_port = port if port is not None else self.default_server_port
         
-    def connect(self, input, VERBOSE = False ):
+    def connect(self, input_data, VERBOSE = False ):
         '''
         dumb client : just passes the data through & collects reply from the server
         '''
@@ -140,7 +140,7 @@ class Client(SharedSocket):
             s.connect((self.server_host, self.server_port))
             
             # Send data to the server
-            self.send_msg(s, input)
+            self.send_msg(s, input_data)
             
             # Read the reply from the server
             reply   = self.recv_msg(s)

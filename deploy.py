@@ -9,10 +9,18 @@ $ python3 deploy.py M
 
 '''
 
+# Import third-party packages
+# --------------------------------------------------------------
 import sys, os
 
+# Import neighboring packages
+# --------------------------------------------------------------
+import sockets_class as sc
+
 if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
-  # This is for the web-server ..,
+
+  # This is for the web-server ...
+  # ... it needs to have some simple cgi script available ...
   if sys.argv[1] == "W" : 
     print("Deploying code on web-server: This is currently a primitive script-copy")
     for script in ["orbfit.cgi"]:
@@ -21,8 +29,9 @@ if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
       os.system(command)
 
   # This is for the compute cluster ...
+  # ... this needs to have a socket-server to receive incoming requests ...
   elif sys.argv[1] == "M":
-    OS = OrbfitServer()
+    OS = sc.OrbfitServer()
     print(f"Launched socket server: OS.host={OS.host}, OS.port={OS.port}")
     OS._listen( startup_func = True )
 

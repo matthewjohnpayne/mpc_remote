@@ -31,11 +31,11 @@ def test_client():
     
     # Get sample input data
     R = remote.RemoteOrbitFit()
-    sample_input_json_string = R.sample_input_json_string()
+    json_string = R.sample_input_json_string_empty()
 
     # Compress the data, as that's what the orbit-server expects ..
     B = sc.Base()
-    compressed = B.compress_json_string(sample_input_json_string)
+    compressed = B.compress_json_string(json_string)
     
     # send to server and get response
     response = C.connect(compressed)

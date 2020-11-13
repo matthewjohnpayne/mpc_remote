@@ -29,18 +29,19 @@ def test_client():
     
     C = sc.Client()
     
-    # Get sample input data
+    # Loop over sample input data ...
     R = remote.RemoteOrbitFit()
-    json_string = R.sample_input_json_string_empty()
+    for n, json_string in enumerate( [  R.sample_input_json_string_empty(),
+                                        R.sample_input_json_string()]):
     
-    # send to server and get response
-    response = C.connect(json_string)
+        # send to server and get response
+        response = C.connect(json_string)
     
-    # check ...
-    O = sc.Orbfit()
-    O._check_json_from_server(response)
+        # check ...
+        O = sc.Orbfit()
+        O._check_json_from_server(response)
 
-    print(f"response={response}")
+        print(f"n: response={response}")
     
 
 

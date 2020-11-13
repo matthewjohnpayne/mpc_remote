@@ -95,7 +95,6 @@ class Shared():
             raise error('You can only send pickleable data')
             
         # send the length of the serialized data first
-        print(f"_send: len(serialized)={len(serialized)} , struct.pack('>I', len(serialized))={struct.pack('>I', len(serialized))}")
         s.send(struct.pack('>I', len(serialized)))
                 
         # send the encoded serialized data

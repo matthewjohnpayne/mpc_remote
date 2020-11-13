@@ -301,7 +301,8 @@ class OrbfitServer(Server, Orbfit):
 
                     # Check data format (expecting json_str)
                     self._check_data_format_from_client(received)
-                    print(f"\t... ", received.keys())
+                    desigkeys = list(received.keys())
+                    print(f"\t... {desigkeys}  )
                     
                     # Do orbit fit [NOT YET IMPLEMENTED]
                     returned_dict = self.fitting_function( received )

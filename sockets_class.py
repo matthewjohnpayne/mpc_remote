@@ -180,7 +180,7 @@ class Client(Shared):
 # Socket-Server-Related Object Definitions
 # - This section has classes SPECIFIC to ORBIT-FITTING
 # -------------------------------------------------------------
-class OrbfitServer(Server):
+class OrbfitServer(Server,Orbfit):
     '''
     Set up a server SPECIFIC to ORBIT-FITTING
     This is intended to be the production version
@@ -188,6 +188,7 @@ class OrbfitServer(Server):
 
     def __init__(self, host=None, port=None):
         Server.__init__(self,)
+        Orbfit.__init__(self,)
 
     def _listen(self, startup_func = False ):
         '''
@@ -256,7 +257,8 @@ class OrbfitServer(Server):
         # 'obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict'
         return sample_data.sample_output_dict_empty()
         
-        
+class Orbfit(Server,Orbfit):
+
     def _check_json_from_client(self, json_string ):
         # Convert json-str to dict & then validate
         self._check_data_format_from_client( json.loads(json_string) )

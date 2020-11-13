@@ -86,11 +86,11 @@ class RemoteOrbitFit(sc.OrbfitServer):
             print("e=", e)
             r = {}
         else:
-            print(f"{r}")
+            print(f"r={r}")
             for k,v in r.__dict__.items():
-                print(k,v)
+                print('\t',k,v)
+            print()
             decoded_content = r._content.decode()
-            print(f"{decoded_content , type(decoded_content) }")
             result_dict = json.loads(decoded_content)
             print(f"result_dict={result_dict}")
         # check the returned data is as expected & return ...

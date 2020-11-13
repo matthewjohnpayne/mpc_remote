@@ -12,9 +12,11 @@ input = sys.stdin
 
 # If there is input, then pass it on to the OrbFit client to get a fit done by the server
 if input:
-  
+  # Instantiate client  
   OC               = sc.Client()
-  orbit_fit_result = OC.connect(input)
+
+  # Call client-connect func with a dict 
+  orbit_fit_result = OC.connect(json.loads(input))
 
   # This should cause the result to be returned to the submitter ...
   print(orbit_fit_result)

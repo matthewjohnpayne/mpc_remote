@@ -32,12 +32,11 @@ def test_client():
     C = sc.Client()
     
     # Loop over sample input data ...
-    R = remote.RemoteOrbitFit()
-    for n, json_string in enumerate( [  sample_data.sample_input_dict_empty(),
+    for n, sample_dict in enumerate( [  sample_data.sample_input_dict_empty(),
                                         sample_data.sample_input_dict()]):
         print()
         # send to server and get response
-        response = C.connect(json_string)
+        response = C.connect(sample_dict)
     
         # check ...
         sc.Orbfit()._check_data_format_from_server(response)
@@ -51,21 +50,18 @@ def test_remote():
     Need to have the socket-server running on the compute machine ...
     Need to have some API access point available
     '''
-    
-    # launch client
-    R = remote.RemoteOrbitFit()
-    
-    # Get sample input data
-    json_string = sample_data.sample_input_json_string_empty()
+        
+    # Loop over sample input data ...
+    for n, sample_json in enumerate( [  sample_data.sample_input_json_string_empty(),
+                                        sample_data.sample_input_json_string()]):
 
-    # use the *request_orbit_extension* function to get an orbit-fit/extension done
-    # - the intent is that this is on a remote machine, but it can be anywhere for this test
-    json_result = R.request_orbit_extension_json(json_string)
-    
-    # check ...
-    O = sc.Orbfit()
-    O._check_json_from_server(response)
+        # use the *request_orbit_extension* function to get an orbit-fit/extension done
+        # - the intent is that this is on a remote machine, but it can be anywhere for this test
+        json_result = R = remote.RemoteOrbitFit().request_orbit_extension_json(sample_json)
+        print(f"json_result={json_result}")
+        # check ...
+        #O = sc.Orbfit()._check_json_from_server(json_result)
 
-    print(f"json_result={json_result}")
+        print(f"json_result={json_result}")
 
 

@@ -53,8 +53,7 @@ class RemoteOrbitFit(sc.OrbfitServer):
 
     Expected usage:
     ----------------
-    R = remote.RemoteOrbitFitClient()
-    R.request_orbit_extension_json(supplied_json)
+    R = remote.RemoteOrbitFit().request_orbit_extension_json(supplied_json)
 
     '''
 

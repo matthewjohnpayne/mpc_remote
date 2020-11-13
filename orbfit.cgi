@@ -3,6 +3,7 @@
 import sys
 import cgi
 import sockets_class as sc 
+import json 
 
 # Need this before any print statements ...
 print("Content-Type: text/plain\n")
@@ -20,4 +21,4 @@ if input:
 
   # This should cause the result to be returned to the submitter ...
   #print(orbit_fit_result)
-  print('abc')
+  print( json.dumps( {'a':'bc'} ) )

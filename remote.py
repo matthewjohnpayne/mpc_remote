@@ -87,8 +87,8 @@ class RemoteOrbitFit(sc.OrbfitServer):
         else:
             print(f"r={r}")
             print(f"type(r)={type(r)}")
+            print(f"r.__dict__={r._content}")
             json_result = json.loads(r)
-            print(f"json_result={json_result}")
 
         # check the returned data is as expected & return ...
         #self._check_data_format_from_server(json_result)

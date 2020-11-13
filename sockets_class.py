@@ -311,7 +311,8 @@ class OrbfitServer(Server, Orbfit):
                     self._send(client,returned_dict)
                     
                 else:
-                    raise error('Client disconnected')
+                    print('Client disconnected')
+                    raise
             else:
                 client.close()
                 return False

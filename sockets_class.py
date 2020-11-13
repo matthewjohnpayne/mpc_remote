@@ -267,7 +267,7 @@ class OrbfitServer(Server, Orbfit):
         '''
         while True:
             if True:
-                received = sock.recv(1024)
+                received = client.recv(1024)
                 if received:
                     print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
                     

@@ -132,8 +132,9 @@ class Client(SharedSocket):
             s.sendall(bytes(input_data,encoding="utf-8"))
 
             # Read the reply from the server
-            reply   = self.recv_msg(s)
-            
+            reply   = s.recv(1024)
+            reply   = reply.decode("utf-8")
+
         return reply
 
 

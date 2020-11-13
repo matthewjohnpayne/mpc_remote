@@ -131,7 +131,7 @@ class Client(SharedSocket):
             #self.send_msg(s, input_data)
             print("Here...")
             print(f"input_data={input_data}")
-            print(f"bytes={bytes(input_data,encoding="utf-8")}")
+            print(f"bytes={bytes(input_data,encoding='utf-8')}")
             s.sendall(bytes(input_data,encoding="utf-8"))
 
             # Read the reply from the server

@@ -15,6 +15,7 @@ sys.path.append(os.path.dirname(os.path.dirname(
     os.path.realpath(__file__))))
 import sockets_class as sc
 import remote
+import sample_data
 
 
     
@@ -32,8 +33,8 @@ def test_client():
     
     # Loop over sample input data ...
     R = remote.RemoteOrbitFit()
-    for n, json_string in enumerate( [  R.sample_input_json_string_empty(),
-                                        R.sample_input_json_string()]):
+    for n, json_string in enumerate( [  sample_data.sample_input_json_string_empty(),
+                                        sample_data.sample_input_json_string()]):
         print(f"\n{n}: json_string={json_string}")
 
         # send to server and get response
@@ -57,8 +58,7 @@ def test_remote():
     R = remote.RemoteOrbitFit()
     
     # Get sample input data
-    R = remote.RemoteOrbitFit()
-    json_string = R.sample_input_json_string_empty()
+    json_string = sample_data.sample_input_json_string_empty()
 
     # use the *request_orbit_extension* function to get an orbit-fit/extension done
     # - the intent is that this is on a remote machine, but it can be anywhere for this test

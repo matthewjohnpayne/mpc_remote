@@ -136,7 +136,9 @@ class Client(SharedSocket):
 
             # Read the reply from the server
             reply   = s.recv(1024)
+            print(f"(1) reply={reply}")
             reply   = reply.decode("utf-8")
+            print(f"(2) reply={reply}")
 
         return reply
 

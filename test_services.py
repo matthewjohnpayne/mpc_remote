@@ -41,7 +41,7 @@ def test_client():
         response = C.connect(json_string)
     
         # check ...
-        sc.Orbfit()_check_data_format_from_client(response)
+        sc.Orbfit()._check_data_format_from_client(response)
 
         print(f"\n{n}: response={response}")
     

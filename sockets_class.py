@@ -172,7 +172,6 @@ class Client(Shared):
 
             # Read the reply from the server
             reply_dict = self._recv(s)
-            print(f"decoded reply_dict from server ={reply_dict}")
 
         return reply_dict
 

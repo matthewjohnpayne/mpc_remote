@@ -270,9 +270,10 @@ class OrbfitServer(Server, Orbfit):
                 received = client.recv(1024)
                 if received:
                     print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
-                    
+
                     # decode received bytestr ...
                     received = received.decode("utf-8")
+                    print(received)
 
                     # Check data format (expecting json_str)
                     self._check_json_from_client(received)
@@ -281,8 +282,8 @@ class OrbfitServer(Server, Orbfit):
                     returned_json_string = self.fitting_function( received )
 
                     # Send the results back to the client
-                    #self.send_msg(client, returned_json_string )
                     client.sendall(bytes(returned_json_string,encoding="utf-8"))
+                    
                 else:
                     raise error('Client disconnected')
             except:

@@ -110,10 +110,10 @@ class Shared():
         msglen = struct.unpack('>I', raw_msglen)[0]
 
         # use a memoryview to receive the data chunk by chunk efficiently
-        view = memoryview(bytearray(total))
+        view = memoryview(bytearray(msglen))
         next_offset = 0
-        while total - next_offset > 0:
-            recv_size = s.recv_into(view[next_offset:], total - next_offset)
+        while msglen - next_offset > 0:
+            recv_size = s.recv_into(view[next_offset:], msglen - next_offset)
             next_offset += recv_size
         
         # deserialize from str to dict

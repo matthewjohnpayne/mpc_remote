@@ -91,8 +91,8 @@ class Shared():
         https://github.com/mdebbar/jsonsocket/blob/master/jsonsocket.py '''
         try:
             serialized = json.dumps(data)
-        except (TypeError, ValueError), e:
-            raise Exception('You can only send JSON-serializable data')
+        except Exception as e:
+            raise error('You can only send JSON-serializable data')
             
         # send the length of the serialized data first
         s.send('%d\n' % len(serialized))
@@ -119,8 +119,8 @@ class Shared():
         # deserialize from str to dict
         try:
             deserialized = json.loads(view.tobytes())
-        except (TypeError, ValueError), e:
-            raise Exception('Data received was not in JSON format')
+        except Exception as e:
+            raise error('Data received was not in JSON format')
         return deserialized
 
 

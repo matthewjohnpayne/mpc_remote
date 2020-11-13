@@ -105,8 +105,10 @@ class Shared():
     
         # read the length of the data, letter by letter until we reach EOL
         total = s.recv(4)
+        print(f"(1)total={total}")
         total = struct.unpack('>I', total)[0]
-        
+        print(f"(2)total={total}")
+
         # use a memoryview to receive the data chunk by chunk efficiently
         view = memoryview(bytearray(total))
         next_offset = 0

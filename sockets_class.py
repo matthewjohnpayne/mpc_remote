@@ -40,23 +40,9 @@ import zlib
 # Socket-Server-Related Object Definitions
 # - This section has GENERIC / PARENT classes
 # --------------------------------------------------------------
-class Base(object):
-    def __init__(self,):
-        pass
-     
-    """
-    def compress_json_string(self, json_str):
-        # encode json_str as a bytes object & compress
-        return zlib.compress( json_str.encode('utf-8') )
 
 
-    def decompress_json_string(self, compressed_json_str):
-        ''' opposite of compress_json_string '''
-        return zlib.decompress(compressed_json_str).decode('utf-8')
-    """
-
-
-class SharedSocket(Base):
+class SharedSocket():
     '''
     Primarily used to provide shared methods
     to send & receive messages of arbitrary length/size
@@ -71,9 +57,11 @@ class SharedSocket(Base):
     def __init__(self,):
         pass
 
+    '''
     def send_msg(self, sock, msg):
         # Prefix each message with a 4-byte length (network byte order)
         msg = struct.pack('>I', len(msg)) + msg
+        sock.sendall(msg)
         sock.sendall(msg)
 
     def recv_msg(self, sock):
@@ -94,7 +82,8 @@ class SharedSocket(Base):
                 return None
             data.extend(packet)
         return data
-        
+    '''
+
 
 class Server(SharedSocket):
     '''
@@ -127,6 +116,7 @@ class Client(SharedSocket):
     def connect(self, input_data, VERBOSE = False ):
         '''
         dumb client : just passes the data through & collects reply from the server
+        NB : Assumes input_data ~ string, and can be converted to bytes
         '''
         # Create a socket objects
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -138,8 +128,9 @@ class Client(SharedSocket):
             s.connect((self.server_host, self.server_port))
             
             # Send data to the server
-            self.send_msg(s, input_data)
-            
+            #self.send_msg(s, input_data)
+            s.sendall(bytes(data,encoding="utf-8"))
+
             # Read the reply from the server
             reply   = self.recv_msg(s)
             
@@ -270,19 +261,22 @@ class OrbfitServer(Server, Orbfit):
         '''
         while True:
             try:
-                recv_json        = self.recv_msg(client)
-                if recv_json:
-                    print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(recv_json)}")
+                received = sock.recv(1024)
+                if received:
+                    print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
                     
-                    # Check data format
-                    #self._check_json_from_client(recv_json)
+                    # decode received bytestr ...
+                    received = received.decode("utf-8")
+
+                    # Check data format (expecting json_str)
+                    self._check_json_from_client(received)
 
                     # Do orbit fit [NOT YET IMPLEMENTED]
-                    returned_json_string = self.fitting_function( recv_json )
+                    returned_json_string = self.fitting_function( received )
 
                     # Send the results back to the client
-                    self.send_msg(client, returned_json_string )
-
+                    #self.send_msg(client, returned_json_string )
+                    client.sendall(bytes(returned_json_string,encoding="utf-8"))
                 else:
                     raise error('Client disconnected')
             except:

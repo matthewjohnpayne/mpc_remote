@@ -36,7 +36,6 @@ import struct
 import subprocess
 import json
 import zlib
-from base64 import b64encode, b64decode
 import requests
 
 
@@ -47,7 +46,7 @@ import sockets_class as sc
 
 # Interface for a remote-machine to request an orbit-fit
 # --------------------------------------------------------------
-class RemoteOrbitFit(sc.Base, sc.Orbfit):
+class RemoteOrbitFit(sc.Orbfit):
     '''
     Interface for a remote-machine to request an orbit-fit
     from a dedicated orbit-fitting server
@@ -60,7 +59,6 @@ class RemoteOrbitFit(sc.Base, sc.Orbfit):
     '''
 
     def __init__(self, host=None, port=None):
-        sc.Base.__init__(self,)
         sc.Orbfit.__init__(self,)
 
     def request_orbit_extension_json(  self, input_json_string , VERBOSE = False):

@@ -140,7 +140,6 @@ class Client(SharedSocket):
             
             # Read the reply from the server
             reply   = self.recv_msg(s)
-            print(f"In Client, reply={reply}")
             
         return reply
 

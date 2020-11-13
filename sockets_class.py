@@ -180,6 +180,73 @@ class Client(Shared):
 # Socket-Server-Related Object Definitions
 # - This section has classes SPECIFIC to ORBIT-FITTING
 # -------------------------------------------------------------
+class Orbfit(Server,Orbfit):
+
+    def _check_json_from_client(self, json_string ):
+        # Convert json-str to dict & then validate
+        self._check_data_format_from_client( json.loads(json_string) )
+    
+    def _check_json_from_server(self, json_string ):
+        # Convert json-str to dict & then validate
+        self._check_data_format_from_server( json.loads(json_string) )
+
+    def _check_data_format_from_client( self, data ):
+    
+        # check overall structure of data is a dict as required:
+        # Outer dict, with desigs as keys, and dicts as values
+        assert isinstance(data, dict)
+        for v in data.values():
+            assert isinstance(v, dict)
+            
+            # Each inner dict has keys: 'obslist', 'rwodict', 'eq0dict'
+            assert len(v) == 3
+            for k in ['obslist', 'rwodict', 'elsdict']:
+                assert k in v, f"keys = {v.keys()}"
+        
+            # check each component
+            assert isinstance( v["obslist"], (list,tuple)), f""
+            for item in v["obslist"]:
+                assert isinstance(item, dict)
+                
+            assert isinstance(v["rwodict"] , dict)
+            
+            assert isinstance(v["elsdict"] , dict)
+
+
+    def _check_data_format_from_server(self, data):
+        '''
+        We expect ...
+        data = {"K15HI1Q":
+            {
+                "obslist": returned_observations_list_of_dicts,
+                "rwodict" : returned_rwo_dict
+                "elsdict" : returned_mid_epoch_dict,
+                "eq1dict" : returned_standard_epoch_dict,
+                "badtrkdict" : return_quality_dict
+            }
+        }
+        '''
+        # check overall structure of data is a dict as required:
+        # Outer dict, with desigs as keys, and dicts as values
+        assert isinstance(data, dict)
+        for v in data.values():
+            assert isinstance(v, dict)
+
+            # check overall structure of data is a dict as required
+            assert len(v) == 5
+            for k in ['obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict']:
+                assert k in v
+            
+            # check components of the dict
+            assert isinstance(v['obslist'], (tuple, list))
+            
+            for d in v['obslist']:
+                assert isinstance(d, dict)
+                
+            for k in ['rwodict', 'eq0dict', 'eq1dict', 'badtrkdict']:
+                assert isinstance(v[k] , dict)
+   
+
 class OrbfitServer(Server,Orbfit):
     '''
     Set up a server SPECIFIC to ORBIT-FITTING
@@ -257,69 +324,3 @@ class OrbfitServer(Server,Orbfit):
         # 'obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict'
         return sample_data.sample_output_dict_empty()
         
-class Orbfit(Server,Orbfit):
-
-    def _check_json_from_client(self, json_string ):
-        # Convert json-str to dict & then validate
-        self._check_data_format_from_client( json.loads(json_string) )
-    
-    def _check_json_from_server(self, json_string ):
-        # Convert json-str to dict & then validate
-        self._check_data_format_from_server( json.loads(json_string) )
-
-    def _check_data_format_from_client( self, data ):
-    
-        # check overall structure of data is a dict as required:
-        # Outer dict, with desigs as keys, and dicts as values
-        assert isinstance(data, dict)
-        for v in data.values():
-            assert isinstance(v, dict)
-            
-            # Each inner dict has keys: 'obslist', 'rwodict', 'eq0dict'
-            assert len(v) == 3
-            for k in ['obslist', 'rwodict', 'elsdict']:
-                assert k in v, f"keys = {v.keys()}"
-        
-            # check each component
-            assert isinstance( v["obslist"], (list,tuple)), f""
-            for item in v["obslist"]:
-                assert isinstance(item, dict)
-                
-            assert isinstance(v["rwodict"] , dict)
-            
-            assert isinstance(v["elsdict"] , dict)
-
-
-    def _check_data_format_from_server(self, data):
-        '''
-        We expect ...
-        data = {"K15HI1Q":
-            {
-                "obslist": returned_observations_list_of_dicts,
-                "rwodict" : returned_rwo_dict
-                "elsdict" : returned_mid_epoch_dict,
-                "eq1dict" : returned_standard_epoch_dict,
-                "badtrkdict" : return_quality_dict
-            }
-        }
-        '''
-        # check overall structure of data is a dict as required:
-        # Outer dict, with desigs as keys, and dicts as values
-        assert isinstance(data, dict)
-        for v in data.values():
-            assert isinstance(v, dict)
-
-            # check overall structure of data is a dict as required
-            assert len(v) == 5
-            for k in ['obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict']:
-                assert k in v
-            
-            # check components of the dict
-            assert isinstance(v['obslist'], (tuple, list))
-            
-            for d in v['obslist']:
-                assert isinstance(d, dict)
-                
-            for k in ['rwodict', 'eq0dict', 'eq1dict', 'badtrkdict']:
-                assert isinstance(v[k] , dict)
-   

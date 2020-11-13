@@ -36,13 +36,16 @@ import subprocess
 import json
 import zlib
 
+# Import local module
+# --------------------------------------------------------------
+import sample_data
 
 # Socket-Server-Related Object Definitions
 # - This section has GENERIC / PARENT classes
 # --------------------------------------------------------------
 
 
-class SharedSocket():
+class Shared():
     '''
     Primarily used to provide shared methods
     to send & receive messages of arbitrary length/size
@@ -83,18 +86,45 @@ class SharedSocket():
             data.extend(packet)
         return data
     '''
-    def recvall(self, sock):
-        fragments = []
-        while True:
-            chunk = sock.recv(4096)
-            if not chunk:
-                break
-            fragments.append(chunk)
-        print(f"recvall:fragments={fragments}")
-        return "".join(fragments)
+    def _send(s, data):
+        ''' send data ...
+        https://github.com/mdebbar/jsonsocket/blob/master/jsonsocket.py '''
+        try:
+            serialized = json.dumps(data)
+        except (TypeError, ValueError), e:
+            raise Exception('You can only send JSON-serializable data')
+            
+        # send the length of the serialized data first
+        s.send('%d\n' % len(serialized))
+        
+        # send the serialized data
+        s.sendall(serialized)
+
+    def _recv(s):
+        # read the length of the data, letter by letter until we reach EOL
+        length_str = ''
+        char = s.recv(1)
+        while char != '\n':
+            length_str += char
+            char = s.recv(1)
+        total = int(length_str)
+        
+        # use a memoryview to receive the data chunk by chunk efficiently
+        view = memoryview(bytearray(total))
+        next_offset = 0
+        while total - next_offset > 0:
+            recv_size = s.recv_into(view[next_offset:], total - next_offset)
+            next_offset += recv_size
+        
+        # deserialize from str to dict
+        try:
+            deserialized = json.loads(view.tobytes())
+        except (TypeError, ValueError), e:
+            raise Exception('Data received was not in JSON format')
+        return deserialized
 
 
-class Server(SharedSocket):
+class Server(Shared):
     '''
     Class to help with setting up a socket-server that will listen for clients
     Intended to act as a parent to multiple types of MPC-server classes
@@ -112,7 +142,7 @@ class Server(SharedSocket):
         self.sock.bind((self.host, self.port))
 
 
-class Client(SharedSocket):
+class Client(Shared):
     '''
     General class & method(s) for connecting to server
     '''
@@ -125,7 +155,7 @@ class Client(SharedSocket):
     def connect(self, input_data, VERBOSE = False ):
         '''
         dumb client : just passes the data through & collects reply from the server
-        NB : Assumes input_data ~ string, and can be converted to bytes
+        NB : Assumes input_data ~ dict, and can be converted to json
         '''
         # Create a socket objects
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -138,12 +168,10 @@ class Client(SharedSocket):
             
             # Send data to the server
             #self.send_msg(s, input_data)
-            s.sendall(bytes(input_data,encoding="utf-8"))
+            self._send(s, input_data)
 
             # Read the reply from the server
-            reply   = self.recvall(s)
-            #reply   = s.recv(1024)
-            reply   = reply.decode("utf-8")
+            reply_dict = self._recv(s)
             print(f"decoded reply from server ={reply}")
 
         return reply
@@ -152,14 +180,83 @@ class Client(SharedSocket):
 
 # Socket-Server-Related Object Definitions
 # - This section has classes SPECIFIC to ORBIT-FITTING
-# --------------------------------------------------------------
-class Orbfit():
+# -------------------------------------------------------------
+class OrbfitServer(Server):
     '''
-    Mainly used to provide shared methods to OrbfitServer & OrbfitClient
-    Mainly enforcing data echange standards ...
+    Set up a server SPECIFIC to ORBIT-FITTING
+    This is intended to be the production version
     '''
-    def __init__(self,):
-        pass
+
+    def __init__(self, host=None, port=None):
+        Server.__init__(self,)
+
+    def _listen(self, startup_func = False ):
+        '''
+        Demo function to illustrate how to set-up server
+        and to allow tests of various functionalities
+        '''
+        # listen() enables a server to accept() connections
+        # NB "5" is the max number of connection requests to queue-up
+        self.sock.listen(5)
+        print('\nOrbfitServer is listening...')
+        while True :
+            
+            # accept() blocks and waits for an incoming connection.
+            # One thing that’s imperative to understand is that we now have a
+            # new socket object from accept(). This is important since it’s the
+            # socket that you’ll use to communicate with the client. It’s distinct
+            # from the listening socket that the server is using to accept new
+            # connections:
+            client, address = self.sock.accept()
+            client.settimeout(self.default_timeout)
+            
+            # Either of the below work ...
+            #self._demoListenToClient(client,address)
+            threading.Thread(target = self._listenToClient,
+                             args = (client,address)).start()
+
+    def _listenToClient(self, client, address):
+        '''
+        This will...
+        (i) receive a message from a client
+        (ii) check that the received data format is as expected
+        (iii) do an orbit fit [NOT YET CONNECTED]
+        (iv) send results of orbit fit back to client
+        
+        NB Note that it assumes it is being sent JSON DATA
+        
+        '''
+        while True:
+            if True:
+                received   = self._recv(client)
+                #received = client.recv(1024)
+                if received:
+                    print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
+                    print(f"received={received}")
+
+                    # Check data format (expecting json_str)
+                    self._check_data_format_from_client(received)
+
+                    # Do orbit fit [NOT YET IMPLEMENTED]
+                    returned_dict = self.fitting_function( received )
+
+                    # Send the results back to the client
+                    client.sendall(returned_dict)
+                    
+                else:
+                    raise error('Client disconnected')
+            else:
+                client.close()
+                return False
+                
+
+
+    def fitting_function(self, input_json ):
+        ''' Do orbit fit [NOT YET IMPLEMENTED] '''
+        # The returned quantities are expected to be ...
+        # 'obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict'
+        return sample_data.sample_output_dict_empty()
+        
         
     def _check_json_from_client(self, json_string ):
         # Convert json-str to dict & then validate
@@ -225,89 +322,3 @@ class Orbfit():
             for k in ['rwodict', 'eq0dict', 'eq1dict', 'badtrkdict']:
                 assert isinstance(v[k] , dict)
    
-
-class OrbfitServer(Server, Orbfit):
-    '''
-    Set up a server SPECIFIC to ORBIT-FITTING
-    This is intended to be the production version
-    '''
-
-    def __init__(self, host=None, port=None):
-        Server.__init__(self,)
-
-    def _listen(self, startup_func = False ):
-        '''
-        Demo function to illustrate how to set-up server
-        and to allow tests of various functionalities
-        '''
-        # listen() enables a server to accept() connections
-        # NB "5" is the max number of connection requests to queue-up
-        self.sock.listen(5)
-        print('\nOrbfitServer is listening...')
-        while True :
-            
-            # accept() blocks and waits for an incoming connection.
-            # One thing that’s imperative to understand is that we now have a
-            # new socket object from accept(). This is important since it’s the
-            # socket that you’ll use to communicate with the client. It’s distinct
-            # from the listening socket that the server is using to accept new
-            # connections:
-            client, address = self.sock.accept()
-            client.settimeout(self.default_timeout)
-            
-            # Either of the below work ...
-            #self._demoListenToClient(client,address)
-            threading.Thread(target = self._listenToClient,
-                             args = (client,address)).start()
-
-    def _listenToClient(self, client, address):
-        '''
-        This will...
-        (i) receive a message from a client
-        (ii) check that the received data format is as expected
-        (iii) do an orbit fit [NOT YET CONNECTED]
-        (iv) send results of orbit fit back to client
-        
-        NB Note that it assumes it is being sent JSON DATA
-        
-        '''
-        while True:
-            if True:
-                received   = self.recvall(client)
-                #received = client.recv(1024)
-                if received:
-                    print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
-                    print(f"received={received}")
-                    # decode received bytestr ...
-                    received = received.decode("utf-8")
-                    print(received)
-
-                    # Check data format (expecting json_str)
-                    self._check_json_from_client(received)
-
-                    # Do orbit fit [NOT YET IMPLEMENTED]
-                    returned_json_string = self.fitting_function( received )
-
-                    # Send the results back to the client
-                    client.sendall(bytes(returned_json_string,encoding="utf-8"))
-                    
-                else:
-                    raise error('Client disconnected')
-            else:
-                client.close()
-                return False
-                
-
-
-    def fitting_function(self, input_json ):
-        ''' Do orbit fit [NOT YET IMPLEMENTED] '''
-        # The returned quantities are expected to be ...
-        # 'obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict'
-        return json.dumps(
-            {"K15HI3Q" : {  'obslist' :[{},{}],
-                            'rwodict' : {},
-                            'eq0dict' : {},
-                            'eq1dict' : {},
-                            'badtrkdict' : {} } })
-        
-

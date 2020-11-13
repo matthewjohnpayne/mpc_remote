@@ -14,31 +14,64 @@ import subprocess
 sys.path.append(os.path.dirname(os.path.dirname(
     os.path.realpath(__file__))))
 import sockets_class as sc
+import remote
 
 
     
-# Some tests of MPC-specific socker server/client
-# These tests need to be pointed at a/the "OrbfitServer"
-# - This can be launched with sockets_class.launch_orbit_fitting_socket_server()
+# Some tests of ...
 # ---------------------------------------------------------------
-def test_request_orbit_extension_json():
+
+def test_client():
     '''
-    This tests the "Client" class written by MJP for MPC
-    This tests requires that there be a server up-and-running
-    This can be launched with sockets_class.launch_orbit_fitting_socket_server()
+    
+    Need to have the socket-server running on the target compute machine ...
+    '''
+    
+    C = sc.Client()
+    
+    # Get sample input data
+    R = remote.RemoteOrbitFit()
+    sample_input_json_string = R.sample_input_json_string()
+
+    # Compress the data, as that's what the orbit-server expects ..
+    B = sc.Base()
+    compressed = B.compress_json_string(sample_input_json_string)
+    
+    # send to server and get response
+    response = C.connect(compressed)
+    
+    # decompress (because the orbit-server is set-up to send compressed data)
+    response = B.decompress_json_string(response)
+    
+    # check ...
+    O = sc.Orbfit()
+    O._check_json_from_server(response)
+
+    print(f"response={response}")
+    
+
+
+def test_remote():
+    '''
+    Need to have the socket-server running on the compute machine ...
+    Need to have some API access point available
     '''
     
     # launch client
-    OC = sc.OrbfitClient()
+    R = RemoteOrbitFit()
     
-    # Make test data
-    input_json_string = OC.sample_input_json_string()
-    
+    # Get sample input data
+    R = remote.RemoteOrbitFit()
+    sample_input_json_string = R.sample_input_json_string()
+
     # use the *request_orbit_extension* function to get an orbit-fit/extension done
     # - the intent is that this is on a remote machine, but it can be anywhere for this test
-    result_json = OC.request_orbit_extension_json(input_json_string)
+    json_result = R.request_orbit_extension_json(sample_input_json_string)
     
-    # test format of returned result_json ...
-    OC._check_json_from_server(result_json)
-    
-  
+    # check ...
+    O = sc.Orbfit()
+    O._check_json_from_server(response)
+
+    print(f"json_result={json_result}")
+
+

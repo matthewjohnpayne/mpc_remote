@@ -35,7 +35,6 @@ import struct
 import subprocess
 import json
 import zlib
-from base64 import b64encode, b64decode
 
 
 # Socket-Server-Related Object Definitions
@@ -52,7 +51,7 @@ class Base(object):
 
     def decompress_json_string(self, compressed_json_str):
         ''' opposite of compress_json_string '''
-        return zlib.decompress(compressed_json_str).decode("utf-8")
+        return zlib.decompress(compressed_json_str).decode('utf-8')
 
 
 class SharedSocket(Base):
@@ -63,7 +62,7 @@ class SharedSocket(Base):
     
     '''
 
-    default_server_host = {'local1':'' , 'local2':'127.0.0.1', 'mpcweb1':'131.142.195.56', 'mpcdb1':'131.142.192.107', 'marsden':'131.142.192.120'}["marsden"]
+    default_server_host = {'local1':'' , 'local2':'127.0.0.1', 'mpcweb1':'131.142.195.56', 'mpcdb1':'131.142.192.107', 'marsden':'131.142.192.120'}["local1"]
     default_server_port = 40001
     default_timeout = 11
 
@@ -117,8 +116,6 @@ class Client(SharedSocket):
     '''
     General class & method(s) for connecting to server
     Intended to facilitate connection to different MPC servers
-    Intended to act as a parent to multiple MPC-client classes
-     - (e.g. orbit-fitting, checking/attribution, ...)
     '''
 
     def __init__(self, host=None, port=None):
@@ -144,7 +141,7 @@ class Client(SharedSocket):
             
             # Read the reply from the server
             reply   = self.recv_msg(s)
-         
+            
         return reply
 
 
@@ -278,19 +275,21 @@ class OrbfitServer(Server, Orbfit):
                     
                     # Decompress the received json string
                     decompressed_json_str = self.decompress_json_string(compressed_json_str)
-                    
+
                     # Check data format
-                    self._check_json_from_client(decompressed_json_str)
-                    
+                    #self._check_json_from_client(decompressed_json_str)
+
                     # Do orbit fit [NOT YET IMPLEMENTED]
                     returned_json_string = self.fitting_function( decompressed_json_str )
+                    print(f"returned_json_string={returned_json_string}")
 
                     # Compress the string
                     compressed_returned_json_string = self.compress_json_string( returned_json_string)
+                    print(f"compressed_returned_json_string={compressed_returned_json_string}")
 
                     # Send the results back to the client
                     self.send_msg(client, compressed_returned_json_string )
-                    
+
                 else:
                     raise error('Client disconnected')
             except:

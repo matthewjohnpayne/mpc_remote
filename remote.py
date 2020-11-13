@@ -37,7 +37,7 @@ import subprocess
 import json
 import zlib
 from base64 import b64encode, b64decode
-import requests 
+import requests
 
 
 # Import neighboring packages
@@ -60,8 +60,8 @@ class RemoteOrbitFit(sc.Base, sc.Orbfit):
     '''
 
     def __init__(self, host=None, port=None):
-        Base.__init__(self,)
-        Orbfit.__init__(self,)
+        sc.Base.__init__(self,)
+        sc.Orbfit.__init__(self,)
 
     def request_orbit_extension_json(  self, input_json_string , VERBOSE = False):
         '''

@@ -90,14 +90,14 @@ class Shared():
         ''' send data ...
         https://github.com/mdebbar/jsonsocket/blob/master/jsonsocket.py '''
         try:
-            serialized = json.dumps(data)
+            serialized = pickle.dumps(data)
         except Exception as e:
-            raise error('You can only send JSON-serializable data')
+            raise error('You can only send pickleable data')
             
         # send the length of the serialized data first
         s.send(struct.pack('>I', len(serialized)))
                 
-        # send the serialized data
+        # send the encoded serialized data
         s.sendall(serialized)
 
     def _recv(self, s):
@@ -117,10 +117,14 @@ class Shared():
             next_offset += recv_size
         
         # deserialize from str to dict
+        print( "view =", view)
+        b= view.tobytes()
+        print( "b=",b)
         try:
-            deserialized = json.loads(view.tobytes())
+            deserialized = pickle.loads( view.tobytes() )
+            print("deserialized=",deserialized)
         except Exception as e:
-            raise error('Data received was not in JSON format')
+            raise error('Data could not be unpickled')
         return deserialized
 
 

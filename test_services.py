@@ -58,7 +58,7 @@ def test_remote():
     '''
     
     # launch client
-    R = RemoteOrbitFit()
+    R = remote.RemoteOrbitFit()
     
     # Get sample input data
     R = remote.RemoteOrbitFit()

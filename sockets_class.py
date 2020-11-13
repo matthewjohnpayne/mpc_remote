@@ -115,7 +115,6 @@ class Server(SharedSocket):
 class Client(SharedSocket):
     '''
     General class & method(s) for connecting to server
-    Intended to facilitate connection to different MPC servers
     '''
 
     def __init__(self, host=None, port=None):
@@ -141,6 +140,7 @@ class Client(SharedSocket):
             
             # Read the reply from the server
             reply   = self.recv_msg(s)
+            print(f"In Client, reply={reply}")
             
         return reply
 

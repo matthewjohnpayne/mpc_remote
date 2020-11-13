@@ -81,10 +81,8 @@ class RemoteOrbitFit(sc.Base, sc.Orbfit):
         self._check_json_from_client(input_json_string)
                 
         # Request orbit-fit via API
-        json_result = self._orbfit_api(input_json_string,
-                                        COMPRESS = True,
-                                        VERBOSE = VERBOSE )
-
+        json_result = self._orbfit_api(input_json_string)
+        print(f"json_result={json_result}")
         # check the returned data is as expected & return ...
         self._check_json_from_server(json_result)
         return json_result
@@ -95,15 +93,17 @@ class RemoteOrbitFit(sc.Base, sc.Orbfit):
         
         # compress the data (functionality lives in sockets_class.Base)
         compressed_json = self.compress_json_string( input_json_string )
-        
+        print("sending...", compressed_json)
         # call the api
         try:
             url = "http://131.142.195.56/cgi-bin/cgipy/orbfit.cgi"
             r = requests.get(url, params=compressed_json )
         except Exception as e:
+            print("e=", e)
             return e
         else:
             # uncompress the data (functionality lives in sockets_class.Base)
+            print("r=", r)
             return self.decompress_json_string(r.text)
         
     

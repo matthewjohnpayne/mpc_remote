@@ -105,7 +105,6 @@ class Shared():
     
         # read the length of the data, letter by letter until we reach EOL
         total = s.recv(4)
-        print(f"_recv: total={total} => {struct.unpack('>I', total)[0]}")
         total = struct.unpack('>I', total)[0]
 
         # use a memoryview to receive the data chunk by chunk efficiently
@@ -296,13 +295,13 @@ class OrbfitServer(Server, Orbfit):
         while True:
             if True:
                 received   = self._recv(client)
-                #received = client.recv(1024)
                 if received:
-                    print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
+                    print(f"Data received in _listenToClient...")
 
                     # Check data format (expecting json_str)
                     self._check_data_format_from_client(received)
-
+                    print(f"\t... ", received.keys())
+                    
                     # Do orbit fit [NOT YET IMPLEMENTED]
                     returned_dict = self.fitting_function( received )
 

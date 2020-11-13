@@ -180,7 +180,7 @@ class Client(Shared):
 # Socket-Server-Related Object Definitions
 # - This section has classes SPECIFIC to ORBIT-FITTING
 # -------------------------------------------------------------
-class Orbfit(Server,Orbfit):
+class Orbfit(Server):
 
     def _check_json_from_client(self, json_string ):
         # Convert json-str to dict & then validate

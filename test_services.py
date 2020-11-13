@@ -26,14 +26,14 @@ def test_client():
     
     Need to have the socket-server running on the target compute machine ...
     '''
-    
+    print("test_client...")
+
     C = sc.Client()
     
     # Loop over sample input data ...
     R = remote.RemoteOrbitFit()
     for n, json_string in enumerate( [  R.sample_input_json_string_empty(),
                                         R.sample_input_json_string()]):
-    
         # send to server and get response
         response = C.connect(json_string)
     

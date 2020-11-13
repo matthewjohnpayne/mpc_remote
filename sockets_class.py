@@ -43,7 +43,8 @@ import zlib
 class Base(object):
     def __init__(self,):
         pass
-        
+     
+    """
     def compress_json_string(self, json_str):
         # encode json_str as a bytes object & compress
         return zlib.compress( json_str.encode('utf-8') )
@@ -52,6 +53,7 @@ class Base(object):
     def decompress_json_string(self, compressed_json_str):
         ''' opposite of compress_json_string '''
         return zlib.decompress(compressed_json_str).decode('utf-8')
+    """
 
 
 class SharedSocket(Base):
@@ -263,29 +265,23 @@ class OrbfitServer(Server, Orbfit):
         (iii) do an orbit fit [NOT YET CONNECTED]
         (iv) send results of orbit fit back to client
         
-        NB Note that it assumes it is being sent COMPRESSED JSON DATA
+        NB Note that it assumes it is being sent JSON DATA
         
         '''
         while True:
             try:
-                compressed_json_str        = self.recv_msg(client)
-                if compressed_json_str:
-                    print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(compressed_json_str)}")
+                recv_json        = self.recv_msg(client)
+                if recv_json:
+                    print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(recv_json)}")
                     
-                    # Decompress the received json string
-                    decompressed_json_str = self.decompress_json_string(compressed_json_str)
-
                     # Check data format
-                    #self._check_json_from_client(decompressed_json_str)
+                    #self._check_json_from_client(recv_json)
 
                     # Do orbit fit [NOT YET IMPLEMENTED]
-                    returned_json_string = self.fitting_function( decompressed_json_str )
-
-                    # Compress the string
-                    compressed_returned_json_string = self.compress_json_string( returned_json_string)
+                    returned_json_string = self.fitting_function( recv_json )
 
                     # Send the results back to the client
-                    self.send_msg(client, compressed_returned_json_string )
+                    self.send_msg(client, returned_json_string )
 
                 else:
                     raise error('Client disconnected')
@@ -295,10 +291,15 @@ class OrbfitServer(Server, Orbfit):
                 
 
 
-    def fitting_function(self, decompressed_json_str ):
+    def fitting_function(self, input_json ):
         ''' Do orbit fit [NOT YET IMPLEMENTED] '''
         # The returned quantities are expected to be ...
         # 'obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict'
-        return json.dumps({"K15HI3Q" : { 'obslist' :[{},{}], 'rwodict' : {}, 'eq0dict' : {}, 'eq1dict' : {}, 'badtrkdict' : {} } })
+        return json.dumps(
+            {"K15HI3Q" : {  'obslist' :[{},{}],
+                            'rwodict' : {},
+                            'eq0dict' : {},
+                            'eq1dict' : {},
+                            'badtrkdict' : {} } })
         
 

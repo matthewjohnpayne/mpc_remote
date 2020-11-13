@@ -295,7 +295,7 @@ class OrbfitServer(Server, Orbfit):
         
         '''
         while True:
-            if True:
+            try:
                 received   = self._recv(client)
                 if received:
                     print(f"Data received in _listenToClient...")
@@ -313,7 +313,7 @@ class OrbfitServer(Server, Orbfit):
                 else:
                     print('Client disconnected')
                     raise
-            else:
+            except:
                 client.close()
                 return False
                 

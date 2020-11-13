@@ -1,5 +1,8 @@
 import json
 
+def sample_output_json_string_empty():
+    return json.dumps(sample_output_dict_empty())
+
 def sample_output_dict_empty():
     return {"K15HI3Q" : {  'obslist' :[{},{}],
                             'rwodict' : {},
@@ -8,10 +11,10 @@ def sample_output_dict_empty():
                             'badtrkdict' : {} } }
 
 def sample_input_json_string():
-    return json.dumps(self.sample_input_dict())
+    return json.dumps(sample_input_dict())
     
 def sample_input_json_string_empty():
-    return json.dumps(self.sample_input_dict_empty())
+    return json.dumps(sample_input_dict_empty())
     
 def sample_input_dict_empty():
     return {

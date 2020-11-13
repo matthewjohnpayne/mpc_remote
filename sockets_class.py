@@ -101,11 +101,10 @@ class Shared():
         s.sendall(serialized)
 
     def _recv(self, s):
+    
         # read the length of the data, letter by letter until we reach EOL
         total = s.recv(4)
-        print("total=", total)
         total = struct.unpack('>I', total)[0]
-        print("total=", total)
         
         # use a memoryview to receive the data chunk by chunk efficiently
         view = memoryview(bytearray(total))
@@ -115,9 +114,6 @@ class Shared():
             next_offset += recv_size
         
         # deserialize from str to dict
-        print( "view =", view)
-        b= view.tobytes()
-        print( "b=",b)
         try:
             deserialized = pickle.loads( view.tobytes() )
             print("deserialized=",deserialized)
@@ -234,7 +230,7 @@ class OrbfitServer(Server):
                 #received = client.recv(1024)
                 if received:
                     print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
-                    print(f"received={received}")
+                    print(f"received={received}, type() = {type(received)}")
 
                     # Check data format (expecting json_str)
                     self._check_data_format_from_client(received)

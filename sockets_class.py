@@ -181,6 +181,7 @@ class Client(Shared):
 # - This section has classes SPECIFIC to ORBIT-FITTING
 # -------------------------------------------------------------
 class Orbfit(Server):
+    ''' Convenience funcs/Utilities related to ORBFIT '''   
 
     def _check_json_from_client(self, json_string ):
         # Convert json-str to dict & then validate

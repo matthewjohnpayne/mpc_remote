@@ -21,4 +21,4 @@ if input:
 
   # This should cause the result to be returned to the submitter ...
   #print(orbit_fit_result)
-  print( json.dumps(input) )
+  print( json.dumps( {'x':'yz'} ) )

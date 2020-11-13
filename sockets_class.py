@@ -281,11 +281,9 @@ class OrbfitServer(Server, Orbfit):
 
                     # Do orbit fit [NOT YET IMPLEMENTED]
                     returned_json_string = self.fitting_function( decompressed_json_str )
-                    print(f"returned_json_string={returned_json_string}")
 
                     # Compress the string
                     compressed_returned_json_string = self.compress_json_string( returned_json_string)
-                    print(f"compressed_returned_json_string={compressed_returned_json_string}")
 
                     # Send the results back to the client
                     self.send_msg(client, compressed_returned_json_string )

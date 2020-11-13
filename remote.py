@@ -95,22 +95,37 @@ class RemoteOrbitFit(sc.Base, sc.Orbfit):
         compressed_json = self.compress_json_string( input_json_string )
         print("sending...", compressed_json)
         # call the api
-        try:
+        if True:
             url = "http://131.142.195.56/cgi-bin/cgipy/orbfit.cgi"
             r = requests.get(url, params=compressed_json )
-        except Exception as e:
-            print("e=", e)
-            return e
-        else:
-            # uncompress the data (functionality lives in sockets_class.Base)
-            print("r=", r)
-            return self.decompress_json_string(r.text)
+        else:# Exception as e:
+            pass
+            #print("e=", e)
+            #return e
+        #else:
+        #    # uncompress the data (functionality lives in sockets_class.Base)
+        #    print("r=", r)
+        #    return self.decompress_json_string(r.text)
         
     
     def sample_input_json_string(self,):
         return json.dumps(self.sample_input_dict())
         
+    def sample_input_json_string_empty(self,):
+        return json.dumps(self.sample_input_dict_empty())
         
+    def sample_input_dict_empty(self,):
+        return {
+        "K15HI3Q": {
+            "elsdict": {},
+            "rwodict": {},
+            "obslist": [
+                {},{}],
+            }
+        }
+
+
+
     def sample_input_dict(self,):
         return {
         "K15HI3Q": {

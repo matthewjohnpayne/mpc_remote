@@ -62,11 +62,11 @@ def test_remote():
     
     # Get sample input data
     R = remote.RemoteOrbitFit()
-    sample_input_json_string = R.sample_input_json_string()
+    json_string = R.sample_input_json_string_empty()
 
     # use the *request_orbit_extension* function to get an orbit-fit/extension done
     # - the intent is that this is on a remote machine, but it can be anywhere for this test
-    json_result = R.request_orbit_extension_json(sample_input_json_string)
+    json_result = R.request_orbit_extension_json(json_string)
     
     # check ...
     O = sc.Orbfit()

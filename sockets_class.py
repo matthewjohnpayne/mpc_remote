@@ -129,6 +129,7 @@ class Client(SharedSocket):
             
             # Send data to the server
             #self.send_msg(s, input_data)
+            print("Here...")
             s.sendall(bytes(input_data,encoding="utf-8"))
 
             # Read the reply from the server

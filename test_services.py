@@ -41,7 +41,7 @@ def test_client():
         O = sc.Orbfit()
         O._check_json_from_server(response)
 
-        print(f"n: response={response}")
+        print(f"\n{n}: response={response}")
     
 
 

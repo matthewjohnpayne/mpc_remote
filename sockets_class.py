@@ -239,7 +239,7 @@ class OrbfitServer(Server):
                     returned_dict = self.fitting_function( received )
 
                     # Send the results back to the client
-                    client.sendall(returned_dict)
+                    self._send(client,returned_dict)
                     
                 else:
                     raise error('Client disconnected')

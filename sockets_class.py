@@ -272,12 +272,12 @@ class OrbfitServer(Server, Orbfit):
         
         '''
         while True:
-            try:
+            if True:
                 received   = self.recvall(client)
                 #received = client.recv(1024)
                 if received:
                     print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
-
+                    print(f"received={received}")
                     # decode received bytestr ...
                     received = received.decode("utf-8")
                     print(received)
@@ -293,7 +293,7 @@ class OrbfitServer(Server, Orbfit):
                     
                 else:
                     raise error('Client disconnected')
-            except:
+            else:
                 client.close()
                 return False
                 

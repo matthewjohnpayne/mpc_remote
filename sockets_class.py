@@ -75,7 +75,7 @@ class Shared():
         msglen = struct.unpack('>I', raw_msglen)[0]
         # Read the message data
         return self.recvall(sock, msglen)
-
+    '''
     def recvall(self, sock, n):
         # Helper function to recv n bytes or return None if EOF is hit
         data = bytearray()
@@ -85,7 +85,7 @@ class Shared():
                 return None
             data.extend(packet)
         return data
-    '''
+
     def _send(self, s, data):
         ''' send data ...
         https://github.com/mdebbar/jsonsocket/blob/master/jsonsocket.py '''
@@ -104,8 +104,10 @@ class Shared():
     def _recv(self, s):
     
         # read the length of the data, letter by letter until we reach EOL
-        total = s.recv(4)
-        total = struct.unpack('>I', total)[0]
+        raw_msglen = s.recv(4)
+        if not raw_msglen:
+            return None
+        msglen = struct.unpack('>I', raw_msglen)[0]
 
         # use a memoryview to receive the data chunk by chunk efficiently
         view = memoryview(bytearray(total))
@@ -316,7 +318,7 @@ class OrbfitServer(Server, Orbfit):
                 
 
 
-    def fitting_function(self, input_json ):
+    def fitting_function(self, input_dict ):
         ''' Do orbit fit [NOT YET IMPLEMENTED] '''
         # The returned quantities are expected to be ...
         # 'obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict'

@@ -46,7 +46,7 @@ import sockets_class as sc
 
 # Interface for a remote-machine to request an orbit-fit
 # --------------------------------------------------------------
-class RemoteOrbitFit(sc.Orbfit):
+class RemoteOrbitFit(sc.OrbfitServer):
     '''
     Interface for a remote-machine to request an orbit-fit
     from a dedicated orbit-fitting server
@@ -59,7 +59,7 @@ class RemoteOrbitFit(sc.Orbfit):
     '''
 
     def __init__(self, host=None, port=None):
-        sc.Orbfit.__init__(self,)
+        sc.OrbfitServer.__init__(self,)
 
     def request_orbit_extension_json(  self, input_json_string , VERBOSE = False):
         '''

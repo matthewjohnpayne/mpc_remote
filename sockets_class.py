@@ -83,6 +83,15 @@ class SharedSocket():
             data.extend(packet)
         return data
     '''
+    def recvall(self, sock):
+        fragments = []
+        while True:
+            chunk = sock.recv(4096)
+            if not chunk:
+                break
+            fragments.append(chunk)
+        print(f"recvall:fragments={fragments}")
+        return "".join(fragments)
 
 
 class Server(SharedSocket):
@@ -132,7 +141,8 @@ class Client(SharedSocket):
             s.sendall(bytes(input_data,encoding="utf-8"))
 
             # Read the reply from the server
-            reply   = s.recv(1024)
+            reply   = self.recvall(s)
+            #reply   = s.recv(1024)
             reply   = reply.decode("utf-8")
             print(f"decoded reply from server ={reply}")
 
@@ -263,7 +273,8 @@ class OrbfitServer(Server, Orbfit):
         '''
         while True:
             try:
-                received = client.recv(1024)
+                received   = self.recvall(client)
+                #received = client.recv(1024)
                 if received:
                     print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
 

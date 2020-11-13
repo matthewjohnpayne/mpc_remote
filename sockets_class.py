@@ -86,7 +86,7 @@ class Shared():
             data.extend(packet)
         return data
     '''
-    def _send(s, data):
+    def _send(self, s, data):
         ''' send data ...
         https://github.com/mdebbar/jsonsocket/blob/master/jsonsocket.py '''
         try:
@@ -100,7 +100,7 @@ class Shared():
         # send the serialized data
         s.sendall(serialized)
 
-    def _recv(s):
+    def _recv(self, s):
         # read the length of the data, letter by letter until we reach EOL
         length_str = ''
         char = s.recv(1)

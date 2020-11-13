@@ -95,8 +95,8 @@ class Shared():
             raise error('You can only send JSON-serializable data')
             
         # send the length of the serialized data first
-        s.send('%d\n' % len(serialized))
-        
+        s.send(struct.pack('>I', len(serialized)))
+                
         # send the serialized data
         s.sendall(serialized)
 

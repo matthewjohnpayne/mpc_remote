@@ -42,7 +42,7 @@ import requests
 # Import neighboring packages
 # --------------------------------------------------------------
 import sockets_class as sc
-
+import sample_data
 
 # Interface for a remote-machine to request an orbit-fit
 # --------------------------------------------------------------
@@ -92,7 +92,7 @@ class RemoteOrbitFit(sc.OrbfitServer):
             print(f"json_result={json_result}")
 
         # check the returned data is as expected & return ...
-        self._check_json_from_server(json_result)
+        #self._check_data_format_from_server(json_result)
         return json_result
         
             

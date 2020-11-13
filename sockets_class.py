@@ -119,7 +119,6 @@ class Shared():
         # deserialize from str to dict
         try:
             deserialized = pickle.loads( view.tobytes() )
-            print("deserialized=",deserialized)
         except Exception as e:
             raise error('Data could not be unpickled')
         return deserialized

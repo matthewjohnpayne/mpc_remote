@@ -35,7 +35,6 @@ def test_client():
     R = remote.RemoteOrbitFit()
     for n, json_string in enumerate( [  sample_data.sample_input_dict_empty(),
                                         sample_data.sample_input_dict()]):
-        print(f"\n{n}: json_string={json_string}")
 
         # send to server and get response
         response = C.connect(json_string)

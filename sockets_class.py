@@ -248,7 +248,7 @@ class Orbfit():
                 assert isinstance(v[k] , dict)
    
 
-class OrbfitServer(Orbfit):
+class OrbfitServer(Server, Orbfit):
     '''
     Set up a server SPECIFIC to ORBIT-FITTING
     This is intended to be the production version

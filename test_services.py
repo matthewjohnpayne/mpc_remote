@@ -35,14 +35,14 @@ def test_client():
     R = remote.RemoteOrbitFit()
     for n, json_string in enumerate( [  sample_data.sample_input_dict_empty(),
                                         sample_data.sample_input_dict()]):
-
+        print()
         # send to server and get response
         response = C.connect(json_string)
     
         # check ...
         sc.Orbfit()._check_data_format_from_server(response)
 
-        print(f"\n{n}: response={response}")
+        print(f"{n}: response={response}")
     
 
 

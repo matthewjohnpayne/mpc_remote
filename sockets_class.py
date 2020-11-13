@@ -266,7 +266,7 @@ class OrbfitServer(Server, Orbfit):
         
         '''
         while True:
-            try:
+            if True:
                 received = sock.recv(1024)
                 if received:
                     print(f"Data recieved in _listenToClient: N_bytes = {sys.getsizeof(received)}")
@@ -285,7 +285,7 @@ class OrbfitServer(Server, Orbfit):
                     client.sendall(bytes(returned_json_string,encoding="utf-8"))
                 else:
                     raise error('Client disconnected')
-            except:
+            else:
                 client.close()
                 return False
                 

@@ -102,12 +102,8 @@ class Shared():
 
     def _recv(self, s):
         # read the length of the data, letter by letter until we reach EOL
-        length_str = ''
-        char = s.recv(1)
-        while char != '\n':
-            length_str += char
-            char = s.recv(1)
-        total = int(length_str)
+        total = s.recv(4)
+        print("total=", total)
         
         # use a memoryview to receive the data chunk by chunk efficiently
         view = memoryview(bytearray(total))

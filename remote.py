@@ -59,8 +59,8 @@ class RemoteOrbitFit(sc.OrbfitServer):
     '''
 
     def __init__(self, host=None, port=None):
-        sc.OrbfitServer.__init__(self,)
-
+        pass
+        
     def request_orbit_extension_json(  self, input_json_string , VERBOSE = False):
         '''
         Request an orbit extension/refit for a previously known orbit

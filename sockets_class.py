@@ -24,7 +24,6 @@
 # Import third-party packages
 # --------------------------------------------------------------
 import sys, os
-import pytest
 import threading
 import socket
 from datetime import datetime
@@ -34,7 +33,6 @@ import numpy as np
 import struct
 import subprocess
 import json
-import zlib
 
 # Import local module
 # --------------------------------------------------------------

@@ -23,7 +23,7 @@ if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
   # ... it needs to have some simple cgi script available ...
   if sys.argv[1] == "W" : 
     print("Deploying code on web-server: This is currently a primitive script-copy")
-    for script in ["orbfit.cgi","sockets_class.py"]:
+    for script in ["orbfit.cgi"]:
       command = "sudo cp %s /var/www/cgi-bin/cgipy" % script
       print("\t", command)
       os.system(command)

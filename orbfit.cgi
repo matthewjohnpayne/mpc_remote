@@ -21,6 +21,7 @@ if input:
  
   try:
     d = {'x':'yz' , 't': [i for i in range( int(1e1) )]}
+    assert False 
   except Exception as e :
     d = {"Exception":e}
 

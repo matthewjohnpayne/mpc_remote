@@ -4,6 +4,7 @@ import sys
 import cgi
 import sockets_class as sc 
 import json 
+import numpy as np
 
 # Need this before any print statements ...
 print("Content-Type: text/plain\n")
@@ -21,4 +22,4 @@ if input:
 
   # This should cause the result to be returned to the submitter ...
   #print(orbit_fit_result)
-  print( json.dumps( {'x':'yz' , 't': input ) )
+  print( json.dumps( {'x':'yz' , 't': a = np.random.random((12,12)) } ) )

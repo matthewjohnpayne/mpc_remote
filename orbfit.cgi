@@ -21,7 +21,6 @@ try:
       OC               = sc.Client()
 
       # Call client-connect func with a dict
-      input_str        = input.read()
       result_dict = OC.connect(json.loads(input_str))
 
     else:

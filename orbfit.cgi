@@ -4,7 +4,6 @@ import sys
 import cgi
 import sockets_class as sc 
 import json 
-import numpy as np
 
 # Need this before any print statements ...
 print("Content-Type: text/plain\n")

@@ -5,7 +5,7 @@ import cgi
 import json 
 
 sys.path.append("/home/mpayne/mpc_socket_server")
-import sockets_class as sc
+#import sockets_class as sc
 
 
 # Need this before any print statements ...

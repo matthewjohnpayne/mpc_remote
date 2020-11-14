@@ -18,7 +18,11 @@ if input:
 
   # Call client-connect func with a dict 
   #orbit_fit_result = OC.connect(json.loads(input))
+ 
+  try:
+    d = {'x':'yz' , 't': [i for i in range( int(1e3) )]}
+  except Exception as e :
+    d = {"Exception":e}
 
   # This should cause the result to be returned to the submitter ...
-  #print(orbit_fit_result)
-  print( json.dumps( {'x':'yz' , 't': [i for i in range( int(1e3) )] } ) )
+  print( json.dumps( d ) )

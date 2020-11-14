@@ -80,21 +80,25 @@ class RemoteOrbitFit(sc.OrbfitServer):
         # Request orbit-fit via API
         try:
             url = "http://131.142.195.56/cgi-bin/cgipy/orbfit.cgi"
+            
+            # Send request to the above URL
             #r = requests.get(url, params=input_json_string )
             r = requests.put(url, data=input_json_string )
-        except Exception as e:
-            print("e=", e)
-            r = {}
-        else:
-            print(f"r={r}")
-            for k,v in r.__dict__.items():
-                print('\t',k,v)
-            print()
+            
+            # Decode the reply
             decoded_content = r._content.decode()
+            
+            # Turn the reply into a dictionary
             result_dict = json.loads(decoded_content)
-            print(f"result_dict={result_dict}")
-        # check the returned data is as expected & return ...
-        #self._check_data_format_from_server(json_result)
+
+            # check the returned data is as expected & return ...
+            #self._check_data_format_from_server(result_dict)
+
+        except Exception as e:
+            result_dict = {"Exception":e}
+        
+        print(f"result_dict={result_dict}")
+        
         return result_dict
         
             

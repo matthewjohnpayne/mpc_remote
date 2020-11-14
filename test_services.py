@@ -58,10 +58,10 @@ def test_remote():
         # use the *request_orbit_extension* function to get an orbit-fit/extension done
         # - the intent is that this is on a remote machine, but it can be anywhere for this test
         json_result = remote.RemoteOrbitFit().request_orbit_extension_json(sample_json)
-        print(f"json_result={json_result}")
+
         # check ...
         #O = sc.Orbfit()._check_json_from_server(json_result)
 
-        print(f"json_result={json_result}")
+        #print(f"json_result={json_result}")
 
 

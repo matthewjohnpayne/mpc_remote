@@ -21,6 +21,13 @@ if input:
  
   try:
     d = {'x':'yz' , 't': [i for i in range( int(1e1) )]}
+    
+    # Instantiate client
+    OC               = sc.Client()
+
+    # Call client-connect func with a dict
+    #orbit_fit_result = OC.connect(json.loads(input))
+
   except Exception as e :
     d = {'exception':f'{e}' , 'file':'orbfit.cgi' }
 

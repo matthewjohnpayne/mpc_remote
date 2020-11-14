@@ -14,10 +14,16 @@ try:
   
   # If there is input, then pass it on to the OrbFit client to get a fit done by the server
   if input:
+
+    # The input is / can-be a TextIOWrapper : so need to read from it to get the contents ...
     input_str        = input.read()
-    
+
+    # If we have an input string of non-zero length, let's try to use it as input to an orbit-fit    
     if input_str:  
+
       # Instantiate client
+      # - In the future, I could call with different ports to get the data directed to different servers 
+      #   E.g. if I want to have a version of this cgiu script that sends to mpchecker instead/as-well as orbfit
       OC               = sc.Client()
 
       # Call client-connect func with a dict

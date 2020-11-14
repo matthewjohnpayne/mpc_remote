@@ -24,7 +24,7 @@ if input:
     #orbit_fit_result = OC.connect(json.loads(input))
     #s = f'{type(orbit_fit_result)}'
 
-    d = {'x':'yz' , 'OC' : OC.__str__() , 'input':f'{type(input)}' }
+    d = {'x':'yz' , 'OC' : OC.__str__() , 'input':f'{type(input)}' , 'input_' : f'{input.read()}' }
   except Exception as e :
     d = {'exception':f'{e}' , 'file':'orbfit.cgi' }
 

@@ -23,7 +23,7 @@ if input:
     d = {'x':'yz' , 't': [i for i in range( int(1e1) )]}
     assert False 
   except Exception as e :
-    d = {'exception':e , 'file':'orbfit.cgi' }
+    d = {'exception':f'{e}' , 'file':'orbfit.cgi' }
 
   # This should cause the result to be returned to the submitter ...
   print( json.dumps( d ) )

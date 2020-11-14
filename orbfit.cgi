@@ -22,4 +22,4 @@ if input:
 
   # This should cause the result to be returned to the submitter ...
   #print(orbit_fit_result)
-  print( json.dumps( {'x':'yz' , 't': a = np.random.random((12,12)) } ) )
+  print( json.dumps( {'x':'yz' , 't': a = [i for i in range( int(1e5) )] } ) )

@@ -21,8 +21,7 @@ if input:
     OC               = sc.Client()
 
     # Call client-connect func with a dict
-    orbit_fit_result = OC.connect(json.loads(input.read()))
-    #s = f'{type(orbit_fit_result)}'
+    #orbit_fit_result = OC.connect(json.loads(input.read()))
 
     d = {'x':'yz' , 'OC' : OC.__str__() , 'input':f'{type(input)}' , 'input_' : f'{input.read()}' }
   except Exception as e :

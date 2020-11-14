@@ -18,13 +18,13 @@ if input:
   try:
     
     # Instantiate client
-    #OC               = sc.Client()
+    OC               = sc.Client()
 
     # Call client-connect func with a dict
-    #orbit_fit_result = OC.connect(json.loads(input))
+    orbit_fit_result = OC.connect(json.loads(input))
     #s = f'{type(orbit_fit_result)}'
 
-    d = {'x':'yz' , 'OC' : 'OC'}#OC.__str__() }
+    d = {'x':'yz' , 'OC' : OC.__str__() }
   except Exception as e :
     d = {'exception':f'{e}' , 'file':'orbfit.cgi' }
 

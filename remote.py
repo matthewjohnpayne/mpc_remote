@@ -95,7 +95,7 @@ class RemoteOrbitFit(sc.OrbfitServer):
             #self._check_data_format_from_server(result_dict)
 
         except Exception as e:
-            result_dict = {"Exception":e}
+            result_dict = {'exception':e, 'file':'remote.py' }
         
         print(f"result_dict={result_dict}")
         

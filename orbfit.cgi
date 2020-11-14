@@ -20,7 +20,7 @@ if input:
   #orbit_fit_result = OC.connect(json.loads(input))
  
   try:
-    d = {'x':'yz' , 't': [i for i in range( int(1e3) )]}
+    d = {'x':'yz' , 't': [i for i in range( int(1e1) )]}
   except Exception as e :
     d = {"Exception":e}
 

@@ -22,11 +22,10 @@ if input:
 
     # Call client-connect func with a dict
     input_str        = input.read()
-    orbit_fit_result = OC.connect(json.loads(input_str))
+    result_dict = OC.connect(json.loads(input_str))
 
-    d = {'x':'yz' , 'OC' : OC.__str__() , 'input':f'{type(input)}' , 'input_str' : f'{input_str}' , 'orbit_fit_result':orbit_fit_result }
   except Exception as e :
-    d = {'exception':f'{e}' , 'file':'orbfit.cgi' }
+    result_dict = {'exception':f'{e}' , 'file':'orbfit.cgi' }
 
   # This should cause the result to be returned to the submitter ...
-  print( json.dumps( d ) )
+  print( json.dumps( result_dict ) )

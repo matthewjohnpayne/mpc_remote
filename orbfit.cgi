@@ -4,8 +4,8 @@ import sys
 import cgi
 import json 
 
-sys.path.append("/home/mpayne/mpc_socket_server")
-import sockets_class as sc
+#sys.path.append("/home/mpayne/mpc_socket_server")
+#import sockets_class as sc
 
 
 # Need this before any print statements ...
@@ -16,22 +16,17 @@ input = sys.stdin
 
 # If there is input, then pass it on to the OrbFit client to get a fit done by the server
 if input:
-  # Instantiate client  
-  #OC               = sc.Client()
-
-  # Call client-connect func with a dict 
-  #orbit_fit_result = OC.connect(json.loads(input))
  
   try:
     
     # Instantiate client
-    OC               = sc.Client()
+    #OC               = sc.Client()
 
     # Call client-connect func with a dict
     #orbit_fit_result = OC.connect(json.loads(input))
     #s = f'{type(orbit_fit_result)}'
 
-    d = {'x':'yz' , 'OC' : OC.__str__() }
+    d = {'x':'yz' , 'OC' : 'OC'}#OC.__str__() }
   except Exception as e :
     d = {'exception':f'{e}' , 'file':'orbfit.cgi' }
 

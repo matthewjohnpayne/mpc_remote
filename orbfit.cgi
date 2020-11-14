@@ -30,7 +30,7 @@ try:
       result_dict = OC.connect(json.loads(input_str))
 
     else:
-      result_dict = {'exception':'Empty input...' , 'file':'orbfit.cgi'}
+      result_dict = {'exception':'Empty input:This API needs to be supplied with json-input that is valid for orbit-fitting' , 'file':'orbfit.cgi'}
 
 except Exception as e :
   result_dict = {'exception':f'{e}' , 'file':'orbfit.cgi' }

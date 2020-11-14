@@ -21,18 +21,16 @@ if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
 
     # This is for the web-server (e.g. mpcweb1) ...
     # ... it needs to have some simple cgi script available ...
-    # ... and also I can't get the python scripts to play nice unless I link them into the cgi-directory
+    # ... and also I can't get the python scripts to play nice with the cgi-script unless I COPY them into the cgi-directory
     if sys.argv[1] == "W" :
         print("Deploying code on web-server: This is currently a primitive copy-to-directory script ...")
-        for script in ["orbfit.cgi"]:
+        for script in ["orbfit.cgi","sockets_class.py", "sample_data.py"]]:
             command = "sudo cp %s /var/www/cgi-bin/cgipy" % script
             print("\t", command)
             os.system(command)
-        for script in ["sockets_class.py", "sample_data.py"]:
-            command = "sudo ln -s /home/mpayne/mpc_socket_server/%s /var/www/cgi-bin/cgipy/%s" % (script,script)
+            command = "sudo chmod 777 /var/www/cgi-bin/cgipy/%s " % script
             print("\t", command)
             os.system(command)
-      
 
     # This is for the compute cluster (e.g. marsden)...
     # ... this needs to have a socket-server to receive incoming requests ...

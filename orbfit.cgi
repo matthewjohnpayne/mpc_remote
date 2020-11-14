@@ -2,8 +2,11 @@
 
 import sys
 import cgi
-import sockets_class as sc 
 import json 
+
+sys.path.append("/home/mpayne/mpc_socket_server")
+import sockets_class as sc
+
 
 # Need this before any print statements ...
 print("Content-Type: text/plain\n")
@@ -25,8 +28,8 @@ if input:
     OC               = sc.Client()
 
     # Call client-connect func with a dict
-    orbit_fit_result = OC.connect(json.loads(input))
-    s = f'{type(orbit_fit_result)}'
+    #orbit_fit_result = OC.connect(json.loads(input))
+    #s = f'{type(orbit_fit_result)}'
 
     d = {'x':'yz' , 'OC' : OC.__str__() }
   except Exception as e :

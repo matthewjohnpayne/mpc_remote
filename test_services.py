@@ -43,7 +43,20 @@ def test_client():
 
         print(f"{n}: response={response}")
     
-
+def test_cluster_orbitfit():
+    '''
+    Test call to the orbit-fitting function (direct from the cluster machine itself)
+    '''
+    
+    # Get sample data
+    sample_dict = sample_data.sample_input_dict()
+    
+    # Call MPan's  /sa/orbit_pipeline/update_existing_orbits.py function
+    sys.path.append("/sa/orbit_pipeline")
+    import update_existing_orbits as update
+    outputdict = update.update_existing_orbits(sample_dict)
+    
+    
 
 def test_remote():
     '''

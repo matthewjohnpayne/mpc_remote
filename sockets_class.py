@@ -254,6 +254,8 @@ class OrbfitServer(Server, Orbfit):
     def __init__(self, host=None, port=None):
         Server.__init__(self,)
         Orbfit.__init__(self,)
+        
+         import update_existing_orbits as update
 
     def _listen(self, startup_func = False ):
         '''
@@ -302,8 +304,9 @@ class OrbfitServer(Server, Orbfit):
                     desigkeys = list(received.keys())
                     print(f"\t... {desigkeys}" )
                     
-                    # Do orbit fit [NOT YET IMPLEMENTED]
-                    returned_dict = self.fitting_function( received )
+                    # Do orbit fit
+                    #returned_dict = sample_data.sample_output_dict_empty()
+                    returned_dict = update.update_existing_orbits(sample_dict)
 
                     # Send the results back to the client
                     self._send(client,returned_dict)
@@ -315,11 +318,3 @@ class OrbfitServer(Server, Orbfit):
                 client.close()
                 return False
                 
-
-
-    def fitting_function(self, input_dict ):
-        ''' Do orbit fit [NOT YET IMPLEMENTED] '''
-        # The returned quantities are expected to be ...
-        # 'obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict'
-        return sample_data.sample_output_dict_empty()
-        

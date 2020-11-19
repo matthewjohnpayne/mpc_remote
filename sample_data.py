@@ -17,7 +17,7 @@ def sample_input_json_string_empty():
 def sample_input_dict_empty():
     return {
     "K15HI3Q": {
-        "elsdict": {},
+        "eq0dict": {},
         "rwodict": {},
         "obslist": [
             {},{}],

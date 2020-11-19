@@ -57,23 +57,7 @@ class Shared():
 
     def __init__(self,):
         pass
-
-    '''
-    def send_msg(self, sock, msg):
-        # Prefix each message with a 4-byte length (network byte order)
-        msg = struct.pack('>I', len(msg)) + msg
-        sock.sendall(msg)
-        sock.sendall(msg)
-
-    def recv_msg(self, sock):
-        # Read message length and unpack it into an integer
-        raw_msglen = self.recvall(sock, 4)
-        if not raw_msglen:
-            return None
-        msglen = struct.unpack('>I', raw_msglen)[0]
-        # Read the message data
-        return self.recvall(sock, msglen)
-    '''
+        
     def recvall(self, sock, n):
         # Helper function to recv n bytes or return None if EOF is hit
         data = bytearray()
@@ -198,7 +182,7 @@ class Orbfit():
             
             # Each inner dict has keys: 'obslist', 'rwodict', 'eq0dict'
             assert len(v) == 3
-            for k in ['obslist', 'rwodict', 'elsdict']:
+            for k in ['obslist', 'rwodict', 'eq0dict']:
                 assert k in v, f"keys = {v.keys()}"
         
             # check each component
@@ -207,8 +191,7 @@ class Orbfit():
                 assert isinstance(item, dict)
                 
             assert isinstance(v["rwodict"] , dict)
-            
-            assert isinstance(v["elsdict"] , dict)
+            assert isinstance(v["eq0dict"] , dict)
 
 
     def _check_data_format_from_server(self, data):
@@ -218,7 +201,7 @@ class Orbfit():
             {
                 "obslist": returned_observations_list_of_dicts,
                 "rwodict" : returned_rwo_dict
-                "elsdict" : returned_mid_epoch_dict,
+                "eq0dict" : returned_mid_epoch_dict,
                 "eq1dict" : returned_standard_epoch_dict,
                 "badtrkdict" : return_quality_dict
             }
@@ -231,8 +214,8 @@ class Orbfit():
             assert isinstance(v, dict)
 
             # check overall structure of data is a dict as required
-            assert len(v) == 5
-            for k in ['obslist', 'rwodict', 'eq0dict', 'eq1dict', 'badtrkdict']:
+            assert len(v) >= 4
+            for k in ['obslist', 'rwodict', 'eq0dict', 'eq1dict']:#, 'badtrkdict']:
                 assert k in v
             
             # check components of the dict
@@ -241,7 +224,7 @@ class Orbfit():
             for d in v['obslist']:
                 assert isinstance(d, dict)
                 
-            for k in ['rwodict', 'eq0dict', 'eq1dict', 'badtrkdict']:
+            for k in ['rwodict', 'eq0dict', 'eq1dict']:#, 'badtrkdict']:
                 assert isinstance(v[k] , dict)
    
 
@@ -255,7 +238,8 @@ class OrbfitServer(Server, Orbfit):
         Server.__init__(self,)
         Orbfit.__init__(self,)
         
-         import update_existing_orbits as update
+        import sys ; sys.path.append("/sa/orbit_pipeline")
+        import update_existing_orbits as update
 
     def _listen(self, startup_func = False ):
         '''
@@ -305,7 +289,6 @@ class OrbfitServer(Server, Orbfit):
                     print(f"\t... {desigkeys}" )
                     
                     # Do orbit fit
-                    #returned_dict = sample_data.sample_output_dict_empty()
                     returned_dict = update.update_existing_orbits(sample_dict)
 
                     # Send the results back to the client

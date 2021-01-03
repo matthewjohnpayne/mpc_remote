@@ -15,7 +15,6 @@ import sys, os
 
 # Import neighboring packages
 # --------------------------------------------------------------
-import sockets_class as sc
 
 if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
 
@@ -41,6 +40,7 @@ if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
     elif sys.argv[1] == "M":
     
         # Launch the orbit EXTENSION server
+        import sockets_class as sc  
         OS = sc.OrbfitServer()
         print(f"Launched socket server: OS.host={OS.host}, OS.port={OS.port}")
         OS._listen( startup_func = True )

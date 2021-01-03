@@ -17,6 +17,11 @@
     It is expected that this will be of use in (e.g.) cheby_checker,
     orbit-fitting, ...
     
+    N.B. It's not obvious whether to put much effort in to this:
+     - If/when we switch to using (e.g.) AWS, then the whole socket-server
+    part will become unnecessary, and only the front end remote.py
+    module will retain any validity
+    
     --------------------------------------------------------------
 '''
 
@@ -38,11 +43,16 @@ import json
 # --------------------------------------------------------------
 import sample_data
 
+# Import the "orbit-extension" function
+import sys ; sys.path.append("/sa/orbit_pipeline")
+import update_existing_orbits
+
+
+
+
 # Socket-Server-Related Object Definitions
 # - This section has GENERIC / PARENT classes
 # --------------------------------------------------------------
-
-
 class Shared():
     '''
     Primarily used to provide shared methods
@@ -51,7 +61,11 @@ class Shared():
     
     '''
 
-    default_server_host = {'local1':'' , 'local2':'127.0.0.1', 'mpcweb1':'131.142.195.56', 'mpcdb1':'131.142.192.107', 'marsden':'131.142.192.120'}["marsden"]
+    default_server_host = { 'local1':'' ,
+                            'local2':'127.0.0.1',
+                            'mpcweb1':'131.142.195.56',
+                            'mpcdb1':'131.142.192.107',
+                            'marsden':'131.142.192.120'}["marsden"]
     default_server_port = 40001
     default_timeout = 11
 
@@ -121,7 +135,7 @@ class Server(Shared):
         
         #  associate the socket with a specific network interface and port number
         self.sock.bind((self.host, self.port))
-
+        
 
 class Client(Shared):
     '''
@@ -136,7 +150,7 @@ class Client(Shared):
     def connect(self, input_data, VERBOSE = False ):
         '''
         dumb client : just passes the data through & collects reply from the server
-        NB : Assumes input_data ~ dict, and can be converted to json
+        NB : Assumes input_data is pickleable
         '''
         # Create a socket objects
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -157,20 +171,28 @@ class Client(Shared):
         return reply_dict
 
 
+# Socket-Server-Related Object Definitions
+# - This section has classes SPECIFIC to TESTING
+# -------------------------------------------------------------
+class Testing():
+    ''' Convenience funcs/Utilities related to TESTING '''
+    
+    def _check_data_format_from_client( self, data ):
+        ''' As test, just want a dict, nothing else examined '''
+        assert isinstance(data, dict)
+
+    def _check_data_format_from_server(self, data):
+        ''' As test, just want a dict, nothing else examined '''
+        assert isinstance(data, dict)
+        
+    def _function_to_be_evaluated(self, data_dict):
+        return {}
 
 # Socket-Server-Related Object Definitions
 # - This section has classes SPECIFIC to ORBIT-FITTING
 # -------------------------------------------------------------
 class Orbfit():
-    ''' Convenience funcs/Utilities related to ORBFIT '''
-
-    def _check_json_from_client(self, json_string ):
-        # Convert json-str to dict & then validate
-        self._check_data_format_from_client( json.loads(json_string) )
-    
-    def _check_json_from_server(self, json_string ):
-        # Convert json-str to dict & then validate
-        self._check_data_format_from_server( json.loads(json_string) )
+    ''' Convenience funcs/Utilities related to ORBFIT-EXTENSION '''
 
     def _check_data_format_from_client( self, data ):
     
@@ -228,6 +250,27 @@ class Orbfit():
                 assert isinstance(v[k] , dict)
    
 
+    def _function_to_be_evaluated(self, data_dict):
+        # Do orbit fit
+        returned_dict = update_existing_orbits.update_existing_orbits(sample_dict)
+        return returned_dict
+
+class IOD():
+    ''' Convenience funcs/Utilities related to Initial Orbit Determination '''
+    
+    def _check_data_format_from_client( self, data ):
+        ''' ... '''
+        assert isinstance(data, dict)
+
+    def _check_data_format_from_server(self, data):
+        ''' ... '''
+        assert isinstance(data, dict)
+        
+    def _function_to_be_evaluated(self, data_dict):
+        return {}
+
+
+"""
 class OrbfitServer(Server, Orbfit):
     '''
     Set up a server SPECIFIC to ORBIT-FITTING
@@ -235,16 +278,21 @@ class OrbfitServer(Server, Orbfit):
     '''
 
     def __init__(self, host=None, port=None):
+    
+        # Get access to relevant class methods
         Server.__init__(self,)
         Orbfit.__init__(self,)
         
+        # Import the "orbit-extension function
         import sys ; sys.path.append("/sa/orbit_pipeline")
         import update_existing_orbits as update
+        
+        
 
     def _listen(self, startup_func = False ):
         '''
-        Demo function to illustrate how to set-up server
-        and to allow tests of various functionalities
+        Set-up server
+        Allow functionality call(s)
         '''
         # listen() enables a server to accept() connections
         # NB "5" is the max number of connection requests to queue-up
@@ -301,3 +349,118 @@ class OrbfitServer(Server, Orbfit):
                 client.close()
                 return False
                 
+"""
+
+# Socket-Server-Related Object Definitions
+# - This section has class(es) able to call a variety of functions, ...
+#   ... depending on the supplied input data
+# -------------------------------------------------------------
+
+class FunctionServer(Server):
+    '''
+    Set up a server able to call a number of functions, depending on the provided input
+    This is intended to be the production version
+    '''
+    
+    # Dictionary to hold possible classes
+    # - These are used to
+    # (i) define the tests of the required formats
+    #(ii) define the main functional call to "evaluate" any supplied data
+    dict_of_classes = {
+        'test'      :   Testing() ,
+        'orbfit'    :   Orbfit() ,
+        'IOD'       :   IOD,
+    }
+    
+
+    def __init__(self, host=None, port=None):
+        '''
+        This server gets instantiated once/rarely:
+         - so we do a one-off import / instantiate all of the things we might need
+        '''
+    
+        # Get access to relevant class methods
+        Server.__init__(self,)
+        
+
+    def _listen(self, startup_func = False ):
+        '''
+        Set-up server
+        Allow functionality call(s)
+        '''
+        # listen() enables a server to accept() connections
+        # NB "5" is the max number of connection requests to queue-up
+        self.sock.listen(5)
+        print('\nOrbfitServer is listening...')
+        while True :
+            
+            # accept() blocks and waits for an incoming connection.
+            # One thing that’s imperative to understand is that we now have a
+            # new socket object from accept(). This is important since it’s the
+            # socket that you’ll use to communicate with the client. It’s distinct
+            # from the listening socket that the server is using to accept new
+            # connections:
+            client, address = self.sock.accept()
+            client.settimeout(self.default_timeout)
+            
+            # Either of the below work ...
+            #self._demoListenToClient(client,address)
+            threading.Thread(target = self._listenToClient,
+                             args = (client,address)).start()
+
+    def _listenToClient(self, client, address):
+        '''
+        This will...
+        (i) receive a message from a client
+        (ii) check that the received data format is as expected
+        (iii) do an orbit fit [NOT YET CONNECTED]
+        (iv) send results of orbit fit back to client
+        
+        NB Note that it assumes it is being sent JSON DATA
+        
+        '''
+        while True:
+            try:
+                received   = self._recv(client)
+                if received:
+                    print(f"Data received in _listenToClient...")
+                    
+                    # Check received data is a dictionary
+                    assert isinstance(received, dict) and len(received) == 1
+                    
+                    # Get request type & get the supplied data out of the dict ...
+                    request_type    = list(received.keys())[0]
+                    data_dict       = received[request_type]
+                    assert isinstance(data_dict, dict)
+
+                    # The class we'll use to access testing & evaluation functions ...
+                    # - This is being determined using the "request_type"
+                    C = dict_of_classes[request_type]
+
+                    # Check data
+                    C._check_data_format_from_client(data_dict)
+                    
+                    # Call the function to be evaluated from the class
+                    returned_dict = C._function_to_be_evaluated(data_dict)
+
+                    # Send the results back to the client
+                    self._send(client,returned_dict)
+                    
+                else:
+                    print('Client disconnected')
+                    raise
+            except:
+                client.close()
+                return False
+
+
+    # The 2 funcs below may be useful for general validation purposes ...
+    # ... the detailed functions for *DICTIONARIES* will be defined in individual classes
+
+    def _check_json_from_client(self, json_string ):
+        # Convert json-str to dict & then validate
+        self._check_data_format_from_client( json.loads(json_string) )
+    
+    def _check_json_from_server(self, json_string ):
+        # Convert json-str to dict & then validate
+        self._check_data_format_from_server( json.loads(json_string) )

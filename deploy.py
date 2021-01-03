@@ -24,20 +24,32 @@ if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
     # ... and also I can't get the python scripts to play nice with the cgi-script unless I COPY them into the cgi-directory
     if sys.argv[1] == "W" :
         print("Deploying code on web-server: This is currently a primitive copy-to-directory script ...")
-        for script in ["orbfit.cgi","sockets_class.py", "sample_data.py"]:
+        for script in ["remote.cgi","remote_general.py","sockets_class.py", "sample_data.py"]:
+            # copy the script over
             command = "sudo cp %s /var/www/cgi-bin/cgipy" % script
             print("\t", command)
             os.system(command)
+            
+            # ensure the permissions are correct
             command = "sudo chmod 777 /var/www/cgi-bin/cgipy/%s " % script
             print("\t", command)
             os.system(command)
 
+
     # This is for the compute cluster (e.g. marsden)...
     # ... this needs to have a socket-server to receive incoming requests ...
     elif sys.argv[1] == "M":
+    
+        # Launch the orbit EXTENSION server
         OS = sc.OrbfitServer()
         print(f"Launched socket server: OS.host={OS.host}, OS.port={OS.port}")
         OS._listen( startup_func = True )
+        
+        # Launch the IOD server
+        #OS = sc.IODServer()
+        #print(f"Launched socket server: OS.host={OS.host}, OS.port={OS.port}")
+        #OS._listen( startup_func = True )
+
 
     else:
         print("should not be able to see this error")

@@ -3,7 +3,7 @@ import json
 # --- EMPTY DICTS FOR TESTING -------------
 def sample_test_dict():
     '''NB: The FunctionServer demands highly dictionary with certain keys, e.g. "test", ... '''
-    return { 'test' : {} }
+    return { 'test' : {'k':'v'} }
 
 
 # --- ???????????????????????? -------------

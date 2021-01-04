@@ -43,13 +43,6 @@ import json
 # --------------------------------------------------------------
 import sample_data
 
-# Import the "orbit-extension" function
-import sys ; sys.path.append("/sa/orbit_pipeline")
-import update_existing_orbits
-
-
-
-
 # Socket-Server-Related Object Definitions
 # - This section has GENERIC / PARENT classes
 # --------------------------------------------------------------
@@ -193,6 +186,12 @@ class Testing():
 # -------------------------------------------------------------
 class Orbfit():
     ''' Convenience funcs/Utilities related to ORBFIT-EXTENSION '''
+    
+    def __init__():
+        # Import the "orbit-extension" function
+        import sys ; sys.path.append("/sa/orbit_pipeline")
+        import update_existing_orbits
+
 
     def _check_data_format_from_client( self, data ):
     
@@ -378,7 +377,7 @@ class FunctionServer(Server):
         This server gets instantiated once/rarely:
          - so we do a one-off import / instantiate all of the things we might need
         '''
-    
+        
         # Get access to relevant class methods
         Server.__init__(self,)
         
@@ -391,7 +390,7 @@ class FunctionServer(Server):
         # listen() enables a server to accept() connections
         # NB "5" is the max number of connection requests to queue-up
         self.sock.listen(5)
-        print('\nOrbfitServer is listening...')
+        print('\nFunctionServer is listening...')
         while True :
             
             # accept() blocks and waits for an incoming connection.

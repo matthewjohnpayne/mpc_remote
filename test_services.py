@@ -24,7 +24,6 @@ import sample_data
 
 def test_client():
     '''
-    
     Need to have the socket-server running on the target compute machine ...
     '''
     print("test_client...")

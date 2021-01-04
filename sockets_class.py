@@ -437,14 +437,14 @@ class FunctionServer(Server):
                     
                     # Check data
                     C._check_data_format_from_client(data_dict)
-                    print(f'HERE')
 
                     # Call the function to be evaluated from the class
                     returned_dict = C._function_to_be_evaluated(data_dict)
                     print(f'returned_dict={returned_dict}')
+                    
                     # Send the results back to the client
                     self._send(client,returned_dict)
-                    
+                    print("HERE")
                 else:
                     print('Client disconnected')
                     raise

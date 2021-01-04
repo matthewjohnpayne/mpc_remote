@@ -435,6 +435,8 @@ class FunctionServer(Server):
 
                     # The class we'll use to access testing & evaluation functions ...
                     # - This is being determined using the "request_type"
+                    print(f'dict_of_classes[request_type]')
+                    print(f'dict_of_classes[request_type]={dict_of_classes[request_type]}')
                     C = dict_of_classes[request_type]
                     print(f'C={C}')
 

@@ -41,9 +41,10 @@ def test_client():
         response = C.connect(sample_dict)
     
         # check ...
-        sc.Testing()._check_data_format_from_server(response)
+        #sc.Testing()._check_data_format_from_server(response)
 
         print(f"{n}: response={response}")
+        print(f"{n}: type(response)={type(response)}")
 
 
 

@@ -171,12 +171,14 @@ class Testing():
     ''' Convenience funcs/Utilities related to TESTING '''
     
     def _check_data_format_from_client( self, data ):
-        ''' As test, just want a dict, nothing else examined '''
+        ''' Simple test data just looks like { 'test' : {'k':'v'} } '''
         assert isinstance(data, dict)
+        assert data == sample_data.sample_test_dict()
 
     def _check_data_format_from_server(self, data):
-        ''' As test, just want a dict, nothing else examined '''
+        ''' Simple test data just looks like { 'tested' : {'k':'v'} } '''
         assert isinstance(data, dict)
+        assert data == self._function_to_be_evaluated(data)
         
     def _function_to_be_evaluated(self, data_dict):
         return {'tested':data_dict}

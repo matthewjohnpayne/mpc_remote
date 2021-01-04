@@ -371,7 +371,7 @@ class FunctionServer(Server):
         # - These are used to
         # (i) define the tests of the required formats
         #(ii) define the main functional call to "evaluate" any supplied data
-        dict_of_classes = {
+        self.dict_of_classes = {
             'test'      :   Testing() ,
             'orbfit'    :   Orbfit() ,
             'IOD'       :   IOD,

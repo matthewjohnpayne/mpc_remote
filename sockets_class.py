@@ -436,7 +436,12 @@ class FunctionServer(Server):
                     # The class we'll use to access testing & evaluation functions ...
                     # - This is being determined using the "request_type"
                     print(f'self.dict_of_classes[request_type]')
-                    print(f'self.dict_of_classes[request_type]={self.dict_of_classes[request_type]}')
+                    try:
+                        print(f'self.dict_of_classes[request_type]={self.dict_of_classes[request_type]}')
+                    except Exception as e:
+                        print(f'Exception={e}')
+
+                    
                     C = self.dict_of_classes[request_type]
                     print(f'C={C}')
 

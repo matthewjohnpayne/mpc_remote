@@ -444,7 +444,7 @@ class FunctionServer(Server):
                     
                     # Send the results back to the client
                     self._send(client,returned_dict)
-                    print("HERE")
+
                 else:
                     print('Client disconnected')
                     raise

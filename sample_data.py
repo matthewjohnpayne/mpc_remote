@@ -1,5 +1,13 @@
 import json
 
+# --- EMPTY DICTS FOR TESTING -------------
+def sample_test_dict():
+    '''NB: The FunctionServer demands highly dictionary with certain keys, e.g. "test", ... '''
+    return { 'test' : {} }
+
+
+# --- ???????????????????????? -------------
+
 def sample_output_json_string_empty():
     return json.dumps(sample_output_dict_empty())
 

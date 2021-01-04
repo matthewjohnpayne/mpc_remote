@@ -19,28 +19,36 @@ import sample_data
 
 
     
-# Some tests of ...
+# Low level tests of connectivity
 # ---------------------------------------------------------------
 
 def test_client():
     '''
-    Need to have the socket-server running on the target compute machine ...
+    Need to have the socket-server running on the target compute machine (e.g. Marsden)
+    This test to be run from externally accessible entry point (e.g. MPCWEB1)
     '''
     print("test_client...")
 
     C = sc.Client()
     
     # Loop over sample input data ...
-    for n, sample_dict in enumerate( [  sample_data.sample_input_dict_empty(),
-                                        sample_data.sample_input_dict()]):
+    for n, sample_dict in enumerate( [  sample_data.sample_test_dict() ]):
         print()
+        # check that this sample_dict is actually correctly formatted
+        sc.Testing()._check_data_format_from_client(sample_dict)
+
         # send to server and get response
         response = C.connect(sample_dict)
     
         # check ...
-        sc.Orbfit()._check_data_format_from_server(response)
+        sc.Testing()._check_data_format_from_server(response)
 
         print(f"{n}: response={response}")
+
+
+
+# Some tests of ...
+# ---------------------------------------------------------------
     
 def test_cluster_orbitfit():
     '''

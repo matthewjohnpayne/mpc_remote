@@ -179,7 +179,7 @@ class Testing():
         assert isinstance(data, dict)
         
     def _function_to_be_evaluated(self, data_dict):
-        return {}
+        return {'tested':data_dict}
 
 # Socket-Server-Related Object Definitions
 # - This section has classes SPECIFIC to ORBIT-FITTING

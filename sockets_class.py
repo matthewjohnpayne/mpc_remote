@@ -173,6 +173,7 @@ class Testing():
     def _check_data_format_from_client( self, data ):
         ''' Simple test data just looks like { 'test' : {'k':'v'} } '''
         assert isinstance(data, dict)
+        print("Testing._check_data_format_from_client...",data , data == sample_data.sample_test_dict() )
         assert data == sample_data.sample_test_dict()
 
     def _check_data_format_from_server(self, data):
@@ -432,21 +433,11 @@ class FunctionServer(Server):
                     request_type    = list(received.keys())[0]
                     data_dict       = received[request_type]
                     assert isinstance(data_dict, dict)
-                    print(f'request_type={request_type}')
-                    print(f'data_dict={data_dict}')
 
                     # The class we'll use to access testing & evaluation functions ...
                     # - This is being determined using the "request_type"
-                    print(f'self.dict_of_classes[request_type]')
-                    try:
-                        print(f'self.dict_of_classes[request_type]={self.dict_of_classes[request_type]}')
-                    except Exception as e:
-                        print(f'Exception={e}')
-
-                    
                     C = self.dict_of_classes[request_type]
-                    print(f'C={C}')
-
+                    
                     # Check data
                     C._check_data_format_from_client(data_dict)
                     print(f'HERE')

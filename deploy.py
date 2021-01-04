@@ -39,18 +39,13 @@ if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
     # ... this needs to have a socket-server to receive incoming requests ...
     elif sys.argv[1] == "M":
     
-        # Launch the orbit EXTENSION server
+        # Launch a generic socket-server able to listen (and redirect) for several different functionalities ...
+        # - orbit-extension, IOD, ...
         import sockets_class as sc
-        OS = sc.OrbfitServer()
-        print(f"Launched socket server: OS.host={OS.host}, OS.port={OS.port}")
-        OS._listen( startup_func = True )
+        FS = sc.FunctionServer()
+        print(f"Launched socket server: FS.host={FS.host}, FS.port={FS.port}")
+        FS._listen( startup_func = True )
         
-        # Launch the IOD server
-        #OS = sc.IODServer()
-        #print(f"Launched socket server: OS.host={OS.host}, OS.port={OS.port}")
-        #OS._listen( startup_func = True )
-
-
     else:
         print("should not be able to see this error")
 

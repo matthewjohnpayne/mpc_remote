@@ -187,7 +187,7 @@ class Testing():
 class Orbfit():
     ''' Convenience funcs/Utilities related to ORBFIT-EXTENSION '''
     
-    def __init__():
+    def __init__(self,):
         # Import the "orbit-extension" function
         import sys ; sys.path.append("/sa/orbit_pipeline")
         import update_existing_orbits

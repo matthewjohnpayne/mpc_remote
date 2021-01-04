@@ -361,23 +361,22 @@ class FunctionServer(Server):
     This is intended to be the production version
     '''
     
-    # Dictionary to hold possible classes
-    # - These are used to
-    # (i) define the tests of the required formats
-    #(ii) define the main functional call to "evaluate" any supplied data
-    dict_of_classes = {
-        'test'      :   Testing() ,
-        'orbfit'    :   Orbfit() ,
-        'IOD'       :   IOD,
-    }
-    
-
     def __init__(self, host=None, port=None):
         '''
         This server gets instantiated once/rarely:
          - so we do a one-off import / instantiate all of the things we might need
         '''
         
+        # Dictionary to hold possible classes
+        # - These are used to
+        # (i) define the tests of the required formats
+        #(ii) define the main functional call to "evaluate" any supplied data
+        dict_of_classes = {
+            'test'      :   Testing() ,
+            'orbfit'    :   Orbfit() ,
+            'IOD'       :   IOD,
+        }
+
         # Get access to relevant class methods
         Server.__init__(self,)
         

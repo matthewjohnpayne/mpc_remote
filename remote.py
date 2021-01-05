@@ -152,7 +152,8 @@ class Remote():
             
             # Decode the reply
             decoded_content = r._content.decode()
-            
+            print(f'decoded_content={decoded_content}')
+
             # Turn the reply into a dictionary
             result_dict = json.loads(decoded_content)
 
@@ -161,6 +162,6 @@ class Remote():
                 METHOD_OBJECT._check_data_format_from_server(result_dict)
 
         except Exception as e:
-            result_dict = {'exception': f'{e}', 'file':'remote.py', 'function':'_request'}
+            result_dict = {'exception': f'{e}', 'file':__file__, 'function':'_request'}
 
         return result_dict

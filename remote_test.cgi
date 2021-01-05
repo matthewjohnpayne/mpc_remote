@@ -18,7 +18,6 @@ try:
   import cgi
   import json 
   import remote_general as rg
-  assert False
   
   # Need this before any print statements ...
   print("Content-Type: text/plain\n")

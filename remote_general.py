@@ -17,9 +17,9 @@
 
 # Dict to map allowed calling script to ...
 allowed_calling_scripts = {
-    'remote_test.py'    : True ,
-    'remote_iod.py'     : True ,
-    'remote_orbfit.py'  : True ,
+    'remote_test.py'    : 'test' ,
+    'remote_iod.py'     : 'iod' ,
+    'remote_orbfit.py'  : 'orbfit' ,
 }
 
 
@@ -32,8 +32,7 @@ def process_cgi_string(input_str, calling_file):
         input_dict = json.loads(input_str)
     
         # Depending on the content of the input, route to the appropriate destination
-        assert calling_file in allowed_calling_scripts,
-            f'{calling_file} not in allowed_calling_scripts'
+        assert calling_file in allowed_calling_scripts, f'{calling_file} not in allowed_calling_scripts'
         
         # wrapping the input dict in a higher dict to pass in the type of request being made
         request_type = allowed_calling_scripts[calling_file]
@@ -49,13 +48,4 @@ def process_cgi_string(input_str, calling_file):
     result_dict = { 'exception':f'{e}' ,
                     'file':'remote.cgi'}
 
-else:
-  result_dict = {   'exception':'Empty input:This API needs to be supplied with json-input that is valid for orbit-fitting',
-                    'file':'remote.cgi'}
-
-except Exception as e :
-result_dict = {   'exception':f'{e}' ,
-                'file':'remote.cgi' }
-
-# This should cause the result to be returned to the submitter ...
-print( json.dumps( result_dict ) )
+  return result_dict

@@ -44,8 +44,8 @@ def process_cgi_string(input_str, calling_file):
         # Call client-connect func with the content from the input dict
         result_dict = C.connect(request_dict)
     
-  except Exception as e :
-    result_dict = { 'exception':f'{e}' ,
+    except Exception as e :
+        result_dict = { 'exception':f'{e}' ,
                     'file':'remote.cgi'}
 
-  return result_dict
+    return result_dict

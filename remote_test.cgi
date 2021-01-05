@@ -18,7 +18,8 @@ try:
   import cgi
   import json 
   import remote_general as rg
-
+  assert False
+  
   # Need this before any print statements ...
   print("Content-Type: text/plain\n")
 
@@ -38,7 +39,7 @@ try:
 
 except Exception as e :
   result_dict = {   'exception':f'{e}' ,
-                    'file':'remote.cgi' }
+                    'file': __file__ }
 
 # This should cause the result to be returned to the submitter ...
 print( json.dumps( result_dict ) )

@@ -46,7 +46,7 @@ import sample_data
 
 # Interface for a remote-machine to request an orbit-fit
 # --------------------------------------------------------------
-class Remote():#): ## <<-- Need to pass in something different : need to make check methods specific to type of remote function
+class Remote():
     '''
     Interface for a remote-machine to request an orbit-fit
     (in particular, the extension of the arc of a known orbit)
@@ -77,7 +77,7 @@ class Remote():#): ## <<-- Need to pass in something different : need to make ch
         '''
         # Request orbit-fit via API
         url             = "http://131.142.195.56/cgi-bin/cgipy/remote_test.cgi"
-        METHOD_OBJECT   = sc.TestServer()
+        METHOD_OBJECT   = sc.Testing()
         result_dict     = self._request(input_json_string , url, METHOD_OBJECT )
         return result_dict
         
@@ -100,7 +100,7 @@ class Remote():#): ## <<-- Need to pass in something different : need to make ch
                 
         # Request orbit-fit via API
         url             = "http://131.142.195.56/cgi-bin/cgipy/remote_orbfit.cgi"
-        METHOD_OBJECT   = sc.IODServer()
+        METHOD_OBJECT   = sc.IOD()
         result_dict     = self._request(input_json_string , url, METHOD_OBJECT )
         return result_dict
         
@@ -124,7 +124,7 @@ class Remote():#): ## <<-- Need to pass in something different : need to make ch
                 
         # Request orbit-fit via API
         url             = "http://131.142.195.56/cgi-bin/cgipy/remote_iod.cgi"
-        METHOD_OBJECT   = sc.OrbfitServer()
+        METHOD_OBJECT   = sc.Orbfit()
         result_dict     = self._request(input_json_string , url, METHOD_OBJECT )
         return result_dict
         
@@ -147,6 +147,7 @@ class Remote():#): ## <<-- Need to pass in something different : need to make ch
                 METHOD_OBJECT._check_json_from_client(input_json_string)
 
             # Send request to the above URL
+            print(f'input_json_string={input_json_string}')
             r = requests.put(url, data=input_json_string )
             
             # Decode the reply

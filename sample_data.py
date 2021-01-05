@@ -4,6 +4,8 @@ import json
 def sample_test_dict():
     '''NB: The FunctionServer demands highly dictionary with certain keys, e.g. "test", ... '''
     return { 'test' : {'k':'v'} }
+def sample_test_json_string():
+    return json.dumps(sample_test_dict())
 
 
 # --- ???????????????????????? -------------

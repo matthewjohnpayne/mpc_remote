@@ -83,8 +83,8 @@ def test_orbfit_extension_server():
     import update_existing_orbits as update
     outputdict = update.update_existing_orbits(sample_dict)
     
-    #
-    print(f'outputdict:\n{outputdict.keys()}')
+    # Print the output keys to screen ...
+    print(f'test_orbfit_extension_server: outputdict.keys=...\n{outputdict.keys()}')
     
 def test_orbfit_extension_client():
     pass 

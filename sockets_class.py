@@ -189,17 +189,6 @@ class Testing():
 class Orbfit():
     ''' Convenience funcs/Utilities related to ORBFIT-EXTENSION '''
     
-    def __init__(self,):
-    
-        # Import the "orbit-extension" function
-        # - Only intended to work on marsden ...
-        try:
-            import sys ; sys.path.append("/sa/orbit_pipeline")
-            import update_existing_orbits
-            print('update_existing_orbits: successful import')
-        except:
-            print('update_existing_orbits: failed import')
-
     @staticmethod
     def _check_data_format_from_client( data ):
     
@@ -259,13 +248,13 @@ class Orbfit():
    
 
     def _function_to_be_evaluated(self, data_dict):
-        # Do orbit fit
-        print(f'In _function_to_be_evaluated ')
-        print(f'len(data_dict)={len(data_dict)}')
-        print(f'data_dict.keys()={ data_dict.keys() }')
+    
+        # Do import (might be nice to push this earlier ...)
         import sys ; sys.path.append("/sa/orbit_pipeline")
         import update_existing_orbits
         print(f'update_existing_orbits={update_existing_orbits}')
+        
+        # Do orbit fit
         returned_dict = update_existing_orbits.update_existing_orbits(data_dict)
         return returned_dict
 
@@ -391,7 +380,7 @@ class FunctionServer(Server):
         self.dict_of_classes = {
             'test'      :   Testing() ,
             'orbfit'    :   Orbfit() ,
-            'IOD'       :   IOD,
+            'IOD'       :   IOD(),
         }
 
         # Get access to relevant class methods
@@ -447,15 +436,14 @@ class FunctionServer(Server):
                     request_type    = list(received.keys())[0]
                     data_dict       = received[request_type]
                     assert isinstance(data_dict, dict)
-                    print(f'request_type={request_type}')
-                    print(f'data_dict={data_dict}')
+
                     # The class we'll use to access testing & evaluation functions ...
                     # - This is being determined using the "request_type"
                     C = self.dict_of_classes[request_type]
-                    print('HERE1', C)
+
                     # Check data
                     C._check_data_format_from_client(data_dict)
-                    print('HERE2')
+
                     # Call the function to be evaluated from the class
                     returned_dict = C._function_to_be_evaluated(data_dict)
                     print(f'returned_dict.keys()={returned_dict.keys()}')

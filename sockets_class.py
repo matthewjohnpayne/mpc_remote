@@ -259,7 +259,9 @@ class Orbfit():
 
     def _function_to_be_evaluated(self, data_dict):
         # Do orbit fit
-        returned_dict = update_existing_orbits.update_existing_orbits(sample_dict)
+        print(f'In _function_to_be_evaluated ')
+        print(f'len(data_dict)={len(data_dict)}')
+        returned_dict = update_existing_orbits.update_existing_orbits(data_dict)
         return returned_dict
 
 class IOD():

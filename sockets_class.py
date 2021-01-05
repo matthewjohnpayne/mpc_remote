@@ -440,7 +440,8 @@ class FunctionServer(Server):
                     request_type    = list(received.keys())[0]
                     data_dict       = received[request_type]
                     assert isinstance(data_dict, dict)
-
+                    print(f'request_type={request_type}')
+                    print(f'data_dict={data_dict}')
                     # The class we'll use to access testing & evaluation functions ...
                     # - This is being determined using the "request_type"
                     C = self.dict_of_classes[request_type]

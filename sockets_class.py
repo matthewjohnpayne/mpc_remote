@@ -190,10 +190,14 @@ class Orbfit():
     ''' Convenience funcs/Utilities related to ORBFIT-EXTENSION '''
     
     def __init__(self,):
+    
         # Import the "orbit-extension" function
-        import sys ; sys.path.append("/sa/orbit_pipeline")
-        import update_existing_orbits
-
+        # - Only intended to work on marsden ...
+        try:
+            import sys ; sys.path.append("/sa/orbit_pipeline")
+            import update_existing_orbits
+        except:
+            pass
     
     @staticmethod
     def _check_data_format_from_client( data ):

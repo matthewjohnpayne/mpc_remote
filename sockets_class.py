@@ -176,7 +176,7 @@ class Testing():
         assert isinstance(data, dict)
 
     @staticmethod
-    def _check_data_format_from_server(self, data):
+    def _check_data_format_from_server( data):
         ''' Simple test data : just look for any dict '''
         assert isinstance(data, dict)
 

@@ -36,6 +36,10 @@ try:
     if input_str:
         #result_dict = rg.process_cgi_string(input_str, __file__)
         result_dict = {'testing':input_str, 'file': __file__ }
+  else:
+        result_dict = {'no input':True, 'file': __file__ }
+
+
 
 except Exception as e :
   result_dict = {   'exception':f'{e}' ,

@@ -263,6 +263,7 @@ class Orbfit():
         print(f'In _function_to_be_evaluated ')
         print(f'len(data_dict)={len(data_dict)}')
         print(f'data_dict.keys()={ data_dict.keys() }')
+        print(f'update_existing_orbits={update_existing_orbits}')
         returned_dict = update_existing_orbits.update_existing_orbits(data_dict)
         return returned_dict
 

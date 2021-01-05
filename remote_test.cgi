@@ -17,7 +17,7 @@ try:
   import sys
   import cgi
   import json 
-  import remote_general as rg
+  #import remote_general as rg
   
   # Need this before any print statements ...
   print("Content-Type: text/plain\n")
@@ -34,7 +34,8 @@ try:
     # If we have an input string of non-zero length, let's try to use it as input to an appropriate socket-server
     # The specific socket_server that will be called is all dealt with in "remote_general.py"
     if input_str:
-        result_dict = rg.process_cgi_string(input_str, __file__)
+        #result_dict = rg.process_cgi_string(input_str, __file__)
+        result_dict = {'testing':input_str, 'file': __file__ }
 
 except Exception as e :
   result_dict = {   'exception':f'{e}' ,

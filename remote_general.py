@@ -48,7 +48,7 @@ def process_cgi_string(input_str, calling_file):
         request_dict = {request_type:input_dict}
         
         # instantiate
-        C = sc.Client(port=destination_port)
+        C = sc.Client()
 
         # Call client-connect func with the content from the input dict
         result_dict = C.connect(request_dict)

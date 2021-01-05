@@ -77,6 +77,7 @@ def test_orbfit_extension_server():
     
     # Get sample data
     sample_dict = sample_data.sample_orbfit_extension_input_dict()
+    print(f'sample_dict.keys()={sample_dict.keys()}')
     
     # Call MPan's  /sa/orbit_pipeline/update_existing_orbits.py function
     sys.path.append("/sa/orbit_pipeline")

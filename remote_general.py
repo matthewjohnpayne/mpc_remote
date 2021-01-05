@@ -15,6 +15,14 @@
 # to use this approach for very long ...
 '''
 
+# Third-party imports
+# -------------------
+import json
+
+# Local imports
+# -------------------
+import sockets_class as sc
+
 # Dict to map allowed calling script to ...
 allowed_calling_scripts = {
     'remote_test.py'    : 'test' ,
@@ -22,9 +30,7 @@ allowed_calling_scripts = {
     'remote_orbfit.py'  : 'orbfit' ,
 }
 
-
 def process_cgi_string(input_str, calling_file):
-    
     
     try:
 
@@ -45,7 +51,6 @@ def process_cgi_string(input_str, calling_file):
         result_dict = C.connect(request_dict)
     
     except Exception as e :
-        result_dict = { 'exception':f'{e}' ,
-                    'file':'remote.cgi'}
+        result_dict = { 'exception':f'{e}' , 'file':__file__}
 
     return result_dict

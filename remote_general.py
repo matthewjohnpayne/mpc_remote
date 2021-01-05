@@ -51,6 +51,6 @@ def process_cgi_string(input_str, calling_file):
         result_dict = C.connect(request_dict)
     
     except Exception as e :
-        result_dict = { 'exception':f'{e}' , 'file':__file__}
+        result_dict = { 'exception':f'{e}' , 'file':__file__, 'calling_file':calling_file}
 
     return result_dict

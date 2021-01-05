@@ -93,7 +93,34 @@ def test_orbfit_extension_server():
     print(f'test_orbfit_extension_server: outputdict.keys=...\n{outputdict.keys()}')
     
 def test_orbfit_extension_client():
-    pass 
+    '''
+    Need to have the socket-server running on the target compute machine (e.g. Marsden)
+    This test to be run from externally accessible entry point (e.g. MPCWEB1)
+    '''
+    print("test_orbfit_extension_client...")
+
+    C = sc.Client()
+    
+    # Loop over sample input data ...
+    for n, sample_dict in enumerate( [  sample_data.sample_orbfit_extension_input_dict() ]):
+        
+        # check that this sample_dict is actually correctly formatted
+        sc.Orbfit()._check_data_format_from_client(sample_dict)
+
+        # send to server and get response
+        # NB We need to wrap the sample_dict in an extra layer along with a signifier key
+        # - In operation, this would be handled by the "remote_general.py" script 
+        response = C.connect( {'orbfit': sample_dict} )
+        print(f'type(response)={type(response)}')
+        print(f'response.keys()={response.keys()}')
+
+        # check that the response is as expected
+        sc.Orbfit()._check_data_format_from_server(response)
+
+    
+    print("test_orbfit_extension_client...SUCCESS")
+
+
 
 def test_orbfit_extension_remote():
     pass

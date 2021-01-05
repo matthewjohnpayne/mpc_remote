@@ -18,7 +18,7 @@
 # Third-party imports
 # -------------------
 import json
-import os 
+import os
 
 # Local imports
 # -------------------
@@ -26,9 +26,9 @@ import sockets_class as sc
 
 # Dict to map allowed calling script to ...
 allowed_calling_scripts = {
-    'remote_test.py'    : 'test' ,
-    'remote_iod.py'     : 'iod' ,
-    'remote_orbfit.py'  : 'orbfit' ,
+    'remote_test.cgi'    : 'test' ,
+    'remote_iod.cgi'     : 'iod' ,
+    'remote_orbfit.cgi'  : 'orbfit' ,
 }
 
 def process_cgi_string(input_str, calling_file):

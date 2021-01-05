@@ -33,7 +33,9 @@ allowed_calling_scripts = {
 def process_cgi_string(input_str, calling_file):
     
     try:
-
+        # Get the filename from the filepath ...
+        calling_file = os.path.split(calling_file)[1]
+        
         # Convert the string to a dictionary
         input_dict = json.loads(input_str)
     

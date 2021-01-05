@@ -170,10 +170,12 @@ class Client(Shared):
 class Testing():
     ''' Convenience funcs/Utilities related to TESTING '''
     
-    def _check_data_format_from_client( self, data ):
+    @staticmethod
+    def _check_data_format_from_client( data ):
         ''' Simple test data : just look for any dict '''
         assert isinstance(data, dict)
 
+    @staticmethod
     def _check_data_format_from_server(self, data):
         ''' Simple test data : just look for any dict '''
         assert isinstance(data, dict)
@@ -192,8 +194,9 @@ class Orbfit():
         import sys ; sys.path.append("/sa/orbit_pipeline")
         import update_existing_orbits
 
-
-    def _check_data_format_from_client( self, data ):
+    
+    @staticmethod
+    def _check_data_format_from_client( data ):
     
         # check overall structure of data is a dict as required:
         # Outer dict, with desigs as keys, and dicts as values
@@ -215,7 +218,8 @@ class Orbfit():
             assert isinstance(v["eq0dict"] , dict)
 
 
-    def _check_data_format_from_server(self, data):
+    @staticmethod
+    def _check_data_format_from_server(data):
         '''
         We expect ...
         data = {"K15HI1Q":
@@ -257,11 +261,13 @@ class Orbfit():
 class IOD():
     ''' Convenience funcs/Utilities related to Initial Orbit Determination '''
     
-    def _check_data_format_from_client( self, data ):
+    @staticmethod
+    def _check_data_format_from_client(  data ):
         ''' ... '''
         assert isinstance(data, dict)
 
-    def _check_data_format_from_server(self, data):
+    @staticmethod
+    def _check_data_format_from_server( data):
         ''' ... '''
         assert isinstance(data, dict)
         

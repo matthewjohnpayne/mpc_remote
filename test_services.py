@@ -109,10 +109,8 @@ def test_orbfit_extension_client():
 
         # send to server and get response
         # NB We need to wrap the sample_dict in an extra layer along with a signifier key
-        # - In operation, this would be handled by the "remote_general.py" script 
+        # - In operation, this would be handled by the "remote_general.py" script
         response = C.connect( {'orbfit': sample_dict} )
-        print(f'type(response)={type(response)}')
-        print(f'response.keys()={response.keys()}')
 
         # check that the response is as expected
         sc.Orbfit()._check_data_format_from_server(response)

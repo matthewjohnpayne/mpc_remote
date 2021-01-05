@@ -229,6 +229,9 @@ class Orbfit():
         # check overall structure of data is a dict as required:
         # Outer dict, with desigs as keys, and dicts as values
         assert isinstance(data, dict)
+        
+        # Turning these tests off as I don't know what all of the stuff is that MPan is returning at present ...
+        '''
         for v in data.values():
             assert isinstance(v, dict)
 
@@ -245,7 +248,8 @@ class Orbfit():
                 
             for k in ['rwodict', 'eq0dict', 'eq1dict']:#, 'badtrkdict']:
                 assert isinstance(v[k] , dict)
-   
+        '''
+
 
     def _function_to_be_evaluated(self, data_dict):
     

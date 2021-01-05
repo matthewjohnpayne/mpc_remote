@@ -147,12 +147,10 @@ class Remote():
                 METHOD_OBJECT._check_json_from_client(input_json_string)
 
             # Send request to the above URL
-            print(f'input_json_string={input_json_string}')
             r = requests.put(url, data=input_json_string )
             
             # Decode the reply
             decoded_content = r._content.decode()
-            print(f'decoded_content={decoded_content}')
 
             # Turn the reply into a dictionary
             result_dict = json.loads(decoded_content)

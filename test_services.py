@@ -61,29 +61,35 @@ def test_basic_remote():
         # - the intent is that this is on a remote machine, but it can be anywhere for this test
         json_result = remote.Remote().request_test_json(sample_json)
 
-        # check ...
-        #O = sc.Orbfit()._check_json_from_server(json_result)
+        # check that the response is as expected
+        sc.Testing()._check_data_format_from_server(json_result)
+        print(f"test_basic_remote: json_result = {json_result}")
 
-        print(f"json_result={json_result}")
 
-
-# Some tests of ...
+# Some tests of orbit-extension functionality
 # ---------------------------------------------------------------
     
-def test_cluster_orbitfit():
+def test_orbfit_extension_server():
     '''
-    Test call to the orbit-fitting function (direct from the cluster machine itself)
+    Test call to the orbit-fitting function
+    (direct from the cluster server machine itself, e.g. marsden)
     '''
     
     # Get sample data
-    sample_dict = sample_data.sample_input_dict()
+    sample_dict = sample_data.sample_orbfit_extension_input_dict()
     
     # Call MPan's  /sa/orbit_pipeline/update_existing_orbits.py function
     sys.path.append("/sa/orbit_pipeline")
     import update_existing_orbits as update
     outputdict = update.update_existing_orbits(sample_dict)
     
-    
+def test_orbfit_extension_client():
+    pass 
+
+def test_orbfit_extension_remote():
+    pass
+
+
 """
 def test_remote():
     '''

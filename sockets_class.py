@@ -196,9 +196,10 @@ class Orbfit():
         try:
             import sys ; sys.path.append("/sa/orbit_pipeline")
             import update_existing_orbits
+            print('update_existing_orbits: successful import')
         except:
-            pass
-    
+            print('update_existing_orbits: failed import')
+
     @staticmethod
     def _check_data_format_from_client( data ):
     

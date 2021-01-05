@@ -445,13 +445,13 @@ class FunctionServer(Server):
                     # The class we'll use to access testing & evaluation functions ...
                     # - This is being determined using the "request_type"
                     C = self.dict_of_classes[request_type]
-                    
+                    print('HERE1', C)
                     # Check data
                     C._check_data_format_from_client(data_dict)
-
+                    print('HERE2')
                     # Call the function to be evaluated from the class
                     returned_dict = C._function_to_be_evaluated(data_dict)
-                    print(f'returned_dict={returned_dict}')
+                    print(f'returned_dict.keys()={returned_dict.keys()}')
                     
                     # Send the results back to the client
                     self._send(client,returned_dict)

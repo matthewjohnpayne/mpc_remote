@@ -134,7 +134,7 @@ def test_orbfit_extension_remote():
         result_dict = remote.Remote().request_orbit_extension_json(sample_json )
 
         # check that the response is as expected
-        sc.Orbfit()._check_data_format_from_server(json_result)
+        sc.Orbfit()._check_data_format_from_server(result_dict)
     
     print("test_orbfit_extension_remote...SUCCESS")
     print("orbit-extension result_dict.keys = ...\n\t", result_dict.keys() )

@@ -259,7 +259,7 @@ class Orbfit():
         print(f'update_existing_orbits={update_existing_orbits}')
         
         # Do orbit fit
-        returned_dict = update_existing_orbits.update_existing_orbits(data_dict)
+        returned_dict = update_existing_orbits.update_existing_orbits(data_dict, proc_subdir=True)
         return returned_dict
 
 class IOD():

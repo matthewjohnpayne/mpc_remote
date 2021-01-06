@@ -256,7 +256,6 @@ class Orbfit():
         # Do import (might be nice to push this earlier ...)
         import sys ; sys.path.append("/sa/orbit_pipeline")
         import update_existing_orbits
-        print(f'update_existing_orbits={update_existing_orbits}')
         
         # Do orbit fit
         returned_dict = update_existing_orbits.update_existing_orbits(  data_dict,

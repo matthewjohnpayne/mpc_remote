@@ -16,7 +16,7 @@ sys.path.append(os.path.dirname(os.path.dirname(
 import sockets_class as sc
 import remote
 import sample_data
-
+import json 
 
     
 # Low level tests of connectivity

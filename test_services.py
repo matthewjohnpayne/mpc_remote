@@ -81,7 +81,7 @@ def test_orbfit_extension_server():
     # Call MPan's  /sa/orbit_pipeline/update_existing_orbits.py function
     sys.path.append("/sa/orbit_pipeline")
     import update_existing_orbits as update
-    outputdict = update.update_existing_orbits(sample_dict)
+    outputdict = update.update_existing_orbits(sample_dict, proc_subdir='update_orbit')
     
     # Check that the input keys are alos in the putput keys
     #NB: At present, the output has many more keys ...

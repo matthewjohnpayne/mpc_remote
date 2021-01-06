@@ -84,7 +84,7 @@ class Remote():
 
     
     # ------- ORBIT FITTING (1) : ORBIT EXTENSION ---------------------------------
-    def     (  self, input_json_string , VERBOSE = False):
+    def request_orbit_extension_json(  self, input_json_string , VERBOSE = False):
         '''
         Request an orbit extension/refit for a previously known orbit
         
@@ -100,7 +100,7 @@ class Remote():
                 
         # Request orbit-fit via API
         url             = "http://131.142.195.56/cgi-bin/cgipy/remote_orbfit.cgi"
-        METHOD_OBJECT   = sc.IOD()
+        METHOD_OBJECT   = sc.Orbfit()
         result_dict     = self._request(input_json_string , url, METHOD_OBJECT )
         return result_dict
         
@@ -124,7 +124,29 @@ class Remote():
                 
         # Request orbit-fit via API
         url             = "http://131.142.195.56/cgi-bin/cgipy/remote_iod.cgi"
-        METHOD_OBJECT   = sc.Orbfit()
+        METHOD_OBJECT   = sc.IOD()
+        result_dict     = self._request(input_json_string , url, METHOD_OBJECT )
+        return result_dict
+        
+    # ------- ORBIT FITTING (3) : COMETS  ----------------------------------------
+    def request_comet_orbit_json(  self, input_json_string , VERBOSE = False):
+        '''
+        Fit comet orbits for a set of observations
+        
+        inputs
+        -------
+        json_data : json
+         - data package to contain all necessary data to specify orbit-fitting.
+
+        returns
+        -------
+        result_dict: dict
+        
+        '''
+                
+        # Request orbit-fit via API
+        url             = "http://131.142.195.56/cgi-bin/cgipy/remote_comet.cgi"
+        METHOD_OBJECT   = sc.Comet()
         result_dict     = self._request(input_json_string , url, METHOD_OBJECT )
         return result_dict
         

@@ -126,7 +126,7 @@ def test_orbfit_extension_remote():
     '''
         
     # Loop over sample input data ...
-    for n, sample_json in enumerate( [  sample_data.sample_orbfit_extension_input_json() ]):
+    for n, sample_json in enumerate( [  sample_data.sample_orbfit_extension_input_json_string() ]):
 
         # use the *request_orbit_extension* function to get an orbit-fit/extension done
         # - the intent is that this is on a remote machine, but it can be anywhere for this test

@@ -57,8 +57,7 @@ def test_basic_remote():
     # Loop over sample input data ...
     for n, sample_json in enumerate( [  sample_data.sample_test_json_string() ]):
 
-        # use the *request_orbit_extension* function to get an orbit-fit/extension done
-        # - the intent is that this is on a remote machine, but it can be anywhere for this test
+        # use the *(sample_json)* function to get an orbit-fit/extension done
         json_result = remote.Remote().request_test_json(sample_json)
 
         # check that the response is as expected
@@ -119,29 +118,40 @@ def test_orbfit_extension_client():
     print("test_orbfit_extension_client...SUCCESS")
 
 
-
 def test_orbfit_extension_remote():
-    pass
-
-
-"""
-def test_remote():
     '''
-    Need to have the socket-server running on the compute machine ...
-    Need to have some API access point available
+    Need to have the socket-server running on the compute machine (e.g. Marsden)
+    Need to have some API access point available (e.g. on MPCWEB1)
+    This test to be run from some third, remote machine (e.g. Laptop)
     '''
         
     # Loop over sample input data ...
-    for n, sample_json in enumerate( [  sample_data.sample_input_json_string_empty(),
-                                        sample_data.sample_input_json_string()]):
+    for n, sample_json in enumerate( [  sample_data.sample_orbfit_extension_input_json() ]):
 
         # use the *request_orbit_extension* function to get an orbit-fit/extension done
         # - the intent is that this is on a remote machine, but it can be anywhere for this test
-        json_result = remote.RemoteOrbitFit().request_orbit_extension_json(sample_json)
+        json_result = remote.Remote().request_orbit_extension_json(sample_json)
 
-        # check ...
-        #O = sc.Orbfit()._check_json_from_server(json_result)
+        # check that the response is as expected
+        sc.Orbfit()._check_data_format_from_server(json_result)
+        print(f"test_orbfit_extension_remote: json_result = {json_result}")
 
-        #print(f"json_result={json_result}")
 
-"""
+# Some tests of IOD functionality
+# ---------------------------------------------------------------
+    
+def test_IOD_server():
+    '''
+    Test call to the IOD function
+    (direct from the cluster server machine itself, e.g. marsden)
+    '''
+    
+    # Get sample data
+    sample_dict = sample_data.sample_orbfit_extension_input_dict()
+    print(f'sample_dict.keys()={sample_dict.keys()}')
+    
+    # Call FS's  function
+    
+    # Check that the input keys are alos in the putput keys
+    
+    # Print the output keys to screen ...

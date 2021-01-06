@@ -84,7 +84,7 @@ class Remote():
 
     
     # ------- ORBIT FITTING (1) : ORBIT EXTENSION ---------------------------------
-    def request_orbit_extension_json(  self, input_json_string , VERBOSE = False):
+    def     (  self, input_json_string , VERBOSE = False):
         '''
         Request an orbit extension/refit for a previously known orbit
         

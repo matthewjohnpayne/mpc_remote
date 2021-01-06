@@ -60,7 +60,7 @@ class Shared():
                             'mpcdb1':'131.142.192.107',
                             'marsden':'131.142.192.120'}["marsden"]
     default_server_port = 40001
-    default_timeout = 11
+    default_timeout = 111
 
     def __init__(self,):
         pass

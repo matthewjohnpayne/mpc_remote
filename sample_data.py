@@ -35,8 +35,7 @@ def sample_orbfit_extension_output_dict_empty():
 
 # ----- POPULATED DATA  -------------------
 def sample_orbfit_extension_input_json_string():
-    return json.dumps(sample_input_dict())
-
+    return json.dumps(sample_orbfit_extension_input_dict())
 
 def sample_orbfit_extension_input_dict():
     with open('testdict.json') as json_file:

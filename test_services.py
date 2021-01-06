@@ -124,7 +124,8 @@ def test_orbfit_extension_remote():
     Need to have some API access point available (e.g. on MPCWEB1)
     This test to be run from some third, remote machine (e.g. Laptop)
     '''
-        
+    print("test_orbfit_extension_remote...")
+
     # Loop over sample input data ...
     for n, sample_json in enumerate( [  sample_data.sample_orbfit_extension_input_json_string() ]):
 
@@ -134,7 +135,9 @@ def test_orbfit_extension_remote():
 
         # check that the response is as expected
         sc.Orbfit()._check_data_format_from_server(json_result)
-        print(f"test_orbfit_extension_remote: json_result = {json_result}")
+    
+    print("test_orbfit_extension_remote...SUCCESS")
+    print("orbit-extension json_result-to-dict:keys = ...\n\t", json.loads(json_result).keys() )
 
 
 # Some tests of IOD functionality

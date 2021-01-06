@@ -23,7 +23,14 @@ if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
     # ... and also I can't get the python scripts to play nice with the cgi-script unless I COPY them into the cgi-directory
     if sys.argv[1] == "W" :
         print("Deploying code on web-server: This is currently a primitive copy-to-directory script ...")
-        for script in ["remote_test.cgi","remote_general.py","sockets_class.py", "sample_data.py"]:
+        for script in [ "remote_test.cgi",
+                        "remote_orbfit.cgi",
+                        "remote_iod.cgi",
+                        "remote_comet.cgi",
+                        "remote_checker.cgi",
+                        "remote_general.py",
+                        "sockets_class.py",
+                        "sample_data.py"]:
             # copy the script over
             command = "sudo cp %s /var/www/cgi-bin/cgipy" % script
             print("\t", command)

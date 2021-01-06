@@ -16,7 +16,7 @@ sys.path.append(os.path.dirname(os.path.dirname(
 import sockets_class as sc
 import remote
 import sample_data
-import json 
+import json
 
     
 # Low level tests of connectivity
@@ -131,13 +131,13 @@ def test_orbfit_extension_remote():
 
         # use the *request_orbit_extension* function to get an orbit-fit/extension done
         # - the intent is that this is on a remote machine, but it can be anywhere for this test
-        json_result = remote.Remote().request_orbit_extension_json(sample_json )
+        result_dict = remote.Remote().request_orbit_extension_json(sample_json )
 
         # check that the response is as expected
         sc.Orbfit()._check_data_format_from_server(json_result)
     
     print("test_orbfit_extension_remote...SUCCESS")
-    print("orbit-extension json_result-to-dict:keys = ...\n\t", json.loads(json_result).keys() )
+    print("orbit-extension result_dict.keys = ...\n\t", result_dict.keys() )
 
 
 # Some tests of IOD functionality

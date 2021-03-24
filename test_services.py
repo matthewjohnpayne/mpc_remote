@@ -150,8 +150,6 @@ def test_IOD_server():
     '''
     
     # Get sample data
-    sample_dict = sample_data.sample_orbfit_extension_input_dict()
-    print(f'sample_dict.keys()={sample_dict.keys()}')
     
     # Call FS's  function
     

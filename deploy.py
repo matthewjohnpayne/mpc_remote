@@ -16,7 +16,7 @@ import sys, os
 # Import neighboring packages
 # --------------------------------------------------------------
 
-if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
+if len(sys.argv) >= 2 and sys.argv[1] in ["W","C"]:
 
     # This is for the web-server (e.g. mpcweb1) ...
     # ... it needs to have some simple cgi script available ...
@@ -42,19 +42,33 @@ if len(sys.argv) == 2 and sys.argv[1] in ["W","M"]:
             os.system(command)
 
 
-    # This is for the compute cluster (e.g. marsden)...
+    # This is for the compute cluster (e.g. marsden / container)...
     # ... this needs to have a socket-server to receive incoming requests ...
-    elif sys.argv[1] == "M":
-    
-        # Launch a generic socket-server able to listen (and redirect) for several different functionalities ...
-        # - orbit-extension, IOD, ...
+    elif sys.argv[1] == "C":
         import sockets_class as sc
-        FS = sc.FunctionServer()
-        print(f"Launched socket server: FS.host={FS.host}, FS.port={FS.port}")
-        FS._listen( startup_func = True )
         
+        # Launch a test server ...
+        if sys.argv[2] == "T":
+            TS = sc.Server()
+                            
+        # Launch an orbfit orbit-extension server ...
+        elif sys.argv[2] == "E":
+            TS = sc.OrbfitExtensionServer()
+
+        # Launch an orbfit IOD server ...
+        elif sys.argv[2] == "I":
+            TS = sc.OrbfitIODServer()
+
+        # don't know what's wanted
+        else:
+            print(f"should not be able to see this error: sys.argv[2]={sys.argv[2]}")
+
+        # Tell the server to start listening
+        print(f"Launched socket server: TS.host={TS.host}, TS.port={TS.port}")
+        TS._listen()
+                            
     else:
-        print("should not be able to see this error")
+        print(f"should not be able to see this error: sys.argv[1]={sys.argv[1]}")
 
 else:
     print("input args not recognized ...", sys.argv)

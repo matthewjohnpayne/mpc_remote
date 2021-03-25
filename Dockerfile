@@ -40,14 +40,12 @@ COPY pythonServer.py /pythonServer.py
 
 # change permission of file
 #RUN ["chmod", "+x", "/mpc_remote/pythonServer.py"]
-#RUN ["chmod", "+x", "mpc_remote/deploy_server.py"]
 
 # run command that executes a python script 
 # - This python script just does a 	permanent loop, hence forcing the container to stay open/deployed/whatever 
 ENTRYPOINT ["python3.8", "/pythonServer.py"]
 
 
-# To Do:
-# Replace some of the above with something like that below ...
-#CMD ["python3.8", "/mpc_remote/deploy_server.py", "T"]
+# Run socket-server on entry: this causes a constantly listening loop 
+#ENTRYPOINT ["python3.8", "/mpc_remote/deploy_server.py", "T"]
 

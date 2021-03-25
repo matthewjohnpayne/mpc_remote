@@ -36,16 +36,16 @@ EXPOSE 40001
 RUN git clone https://github.com/matthewjohnpayne/mpc_remote.git
 
 # This is copying an external file (local compile dir only?) to internally (within the image)
-COPY pythonServer.py /pythonServer.py
+#COPY pythonServer.py /pythonServer.py
 
 # change permission of file
 #RUN ["chmod", "+x", "/mpc_remote/pythonServer.py"]
 
 # run command that executes a python script 
 # - This python script just does a 	permanent loop, hence forcing the container to stay open/deployed/whatever 
-ENTRYPOINT ["python3.8", "/pythonServer.py"]
+#ENTRYPOINT ["python3.8", "/pythonServer.py"]
 
 
 # Run socket-server on entry: this causes a constantly listening loop 
-#ENTRYPOINT ["python3.8", "/mpc_remote/deploy_server.py", "T"]
+ENTRYPOINT ["python3.8", "/mpc_remote/deploy_server.py", "T"]
 

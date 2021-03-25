@@ -14,10 +14,10 @@ os.system("docker build . -t mpcremoteimage")
 
 # allow access to local file-system: especially useful during development
 # https://docs.docker.com/storage/bind-mounts/
-# os.system("docker run -d -p 40001:40001 -v ~/Envs/mpc_remote:/mpc_remote --name mpcremotecontainer mpcremoteimage")
+os.system("docker run -d -p 40001:40001 -v ~/Envs/mpc_remote:/mpc_remote --name mpcremotecontainer mpcremoteimage")
 
 # run the image in a container and name the container as "mpcremotecontainer"
-os.system("docker run -d --name mpcremotecontainer mpcremoteimage")
+#os.system("docker run -d --name mpcremotecontainer mpcremoteimage")
 
 # execute interactively (so you get into the command-line)
 os.system("docker exec -it mpcremotecontainer bash")

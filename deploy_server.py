@@ -36,3 +36,5 @@ elif sys.argv[1] == "I":
 else:
     print(f"should not be able to see this error: sys.argv[1]={sys.argv[1]}")
 
+# Now make the damn thing listen at a port
+TS._listen()

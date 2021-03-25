@@ -14,6 +14,8 @@ MAINTAINER Matthew Payne
 RUN apt-get update
 RUN apt-get install -y vim
 RUN apt-get update
+RUN apt-get install -y git
+RUN apt-get update
 RUN apt-get install -y python3.8
 RUN apt-get update
 RUN apt-get install -y python3-pip 
@@ -33,16 +35,19 @@ EXPOSE 40001
 # Clone mpc_remote from GitHub 
 RUN git clone https://github.com/matthewjohnpayne/mpc_remote.git
 
-# I assume this is (somehow) copying from externally (local compile dir only?) to internally (within the image)
+# This is copying an external file (local compile dir only?) to internally (within the image)
 COPY pythonServer.py /pythonServer.py
 
-
 # change permission of file
-RUN ["chmod", "+x", "/pythonServer.py"]
+#RUN ["chmod", "+x", "/mpc_remote/pythonServer.py"]
+#RUN ["chmod", "+x", "mpc_remote/deploy_server.py"]
 
 # run command that executes a python script 
 # - This python script just does a 	permanent loop, hence forcing the container to stay open/deployed/whatever 
 ENTRYPOINT ["python3.8", "/pythonServer.py"]
 
 
+# To Do:
+# Replace some of the above with something like that below ...
+#CMD ["python3.8", "/mpc_remote/deploy_server.py", "T"]
 
